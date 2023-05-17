@@ -1,12 +1,10 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 class Matrix
 {
 public:
-    Matrix(int num_row, int num_col, vector<vector<int>> vect);
+    Matrix(int num_row, int num_col, std::vector<std::vector<int>> vect);
     int GetNumberOfRow();
     int GetNumberOfColumn();
     void SetElement(int i, int j, int value);
@@ -15,15 +13,15 @@ public:
     Matrix MultiplyMatrices(Matrix B);
 
 private:
-    int n_row;
-    int n_col;
-    vector<vector<int>> matrix;
+    int numberOfRows_;
+    int numberOfColumns_;
+    std::vector<std::vector<int>> matrix_;
 };
 
 int main()
 {
-    vector<vector<int>> m1{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    vector<vector<int>> m2{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    std::vector<std::vector<int>> m1{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    std::vector<std::vector<int>> m2{{2, 0, 0}, {0, 1, 0}, {0, 0, 1}};
     Matrix matrix1(3, 3, m1);
     Matrix matrix2(3, 3, m2);
     matrix1.Display();
@@ -35,52 +33,52 @@ int main()
     return 0;
 }
 
-Matrix::Matrix(int num_row, int num_col, vector<vector<int>> vect)
+Matrix::Matrix(int num_row, int num_col, std::vector<std::vector<int>> vect)
 {
-    n_row = num_row;
-    n_col = num_col;
-    matrix = vect;
+    numberOfRows_ = num_row;
+    numberOfColumns_ = num_col;
+    matrix_ = vect;
 }
-int Matrix::GetNumberOfRow() { return matrix.size(); }
-int Matrix::GetNumberOfColumn() { return matrix[0].size(); }
-void Matrix::SetElement(int i, int j, int value) { matrix[i][j] = value; }
+int Matrix::GetNumberOfRow() { return matrix_.size(); }
+int Matrix::GetNumberOfColumn() { return matrix_[0].size(); }
+void Matrix::SetElement(int i, int j, int value) { matrix_[i][j] = value; }
 void Matrix::Display()
 {
-    cout << "-------------------------------" << endl;
-    for (int i = 0; i < n_row; i++)
+    std::cout << "-------------------------------" << std::endl;
+    for (int i = 0; i < numberOfRows_; i++)
     {
-        for (int j = 0; j < n_col; j++)
+        for (int j = 0; j < numberOfColumns_; j++)
         {
-            cout << matrix[i][j] << "\t";
+            std::cout << matrix_[i][j] << "\t";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
-    cout << "-------------------------------" << endl;
+    std::cout << "-------------------------------" << std::endl;
 }
 Matrix Matrix::AddMatrices(Matrix B)
 {
-    vector<vector<int>> Added_M(n_row,vector<int>(n_col,0));
-    for (int i = 0; i < n_row; i++)
+    std::vector<std::vector<int>> AddedMatrix(numberOfRows_,std::vector<int>(numberOfColumns_,0));
+    for (int i = 0; i < numberOfRows_; i++)
     {
-        for (int j = 0; j < n_col; j++)
+        for (int j = 0; j < numberOfColumns_; j++)
         {
-            Added_M[i][j] = matrix[i][j] + B.matrix[i][j];
+            AddedMatrix[i][j] = matrix_[i][j] + B.matrix_[i][j];
         } 
     }
-    return Matrix(n_row, n_col, Added_M);
+    return Matrix(numberOfRows_, numberOfColumns_, AddedMatrix);
 }
 Matrix Matrix::MultiplyMatrices(Matrix B)
 {
-    vector<vector<int>> Multiplied_M(n_row, vector<int>(B.n_col, 0));
-    for (int i = 0; i < n_row; i++)
+    std::vector<std::vector<int>> MultipliedMatrix(numberOfRows_, std::vector<int>(B.numberOfColumns_, 0));
+    for (int i = 0; i < numberOfRows_; i++)
     {
-        for (int j = 0; j < B.n_col; j++)
+        for (int j = 0; j < B.numberOfColumns_; j++)
         {
-            for (int k = 0; k < n_col; k++)
+            for (int k = 0; k < numberOfColumns_; k++)
             {
-                Multiplied_M[i][j] += matrix[i][k] * B.matrix[k][j];
+                MultipliedMatrix[i][j] += matrix_[i][k] * B.matrix_[k][j];
             }
         }
     }
-    return Matrix(n_row, B.n_col, Multiplied_M);
+    return Matrix(numberOfRows_, B.numberOfColumns_, MultipliedMatrix);
 }
