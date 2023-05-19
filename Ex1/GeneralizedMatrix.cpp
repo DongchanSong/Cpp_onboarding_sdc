@@ -14,22 +14,18 @@ public:
     Matrix AddMatrices(Matrix);
     Matrix MultiplyMatrices(Matrix);
 
-    // int DimensionCheckFault(std::vector<std::vector<int>>);
-
 private:
     int numberOfRows_;
     int numberOfColumns_;
     std::vector<std::vector<int>> matrix_;
 };
 
-
-
 int main()
 {
-    // std::vector<std::vector<int>> m1{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    // std::vector<std::vector<int>> m2{{2, 0, 0, 1}, {0, 1, 0, 1}, {0, 0, 1, 1}};
-    std::vector<std::vector<int>> m1{{0},{0,0,1}};
-    std::vector<std::vector<int>> m2{{1}};
+    std::vector<std::vector<int>> m1{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    std::vector<std::vector<int>> m2{{2, 0, 0, 1}, {0, 1, 0, 1}, {0, 0, 1, 1}};
+    // std::vector<std::vector<int>> m1{{0},{0,0,1}};
+    // std::vector<std::vector<int>> m2{{1}};
 
     if (DimensionFaultCheck(m1) || DimensionFaultCheck(m2))
     {
@@ -39,8 +35,6 @@ int main()
 
     Matrix matrix1(m1.size(), m1[0].size(), m1);
     Matrix matrix2(m2.size(), m2[0].size(), m2);
-
-
 
     std::cout << "1. M1:" << std::endl;
     matrix1.Display();
@@ -108,29 +102,29 @@ void Matrix::Display()
 }
 Matrix Matrix::AddMatrices(Matrix B)
 {
-    std::vector<std::vector<int>> AddedMatrix(numberOfRows_, std::vector<int>(numberOfColumns_, 0));
+    std::vector<std::vector<int>> addedMatrix(numberOfRows_, std::vector<int>(numberOfColumns_, 0));
     for (int i = 0; i < numberOfRows_; i++)
     {
         for (int j = 0; j < numberOfColumns_; j++)
         {
-            AddedMatrix[i][j] = matrix_[i][j] + B.matrix_[i][j];
+            addedMatrix[i][j] = matrix_[i][j] + B.matrix_[i][j];
         }
     }
-    return Matrix(numberOfRows_, numberOfColumns_, AddedMatrix);
+    return Matrix(numberOfRows_, numberOfColumns_, addedMatrix);
 }
 Matrix Matrix::MultiplyMatrices(Matrix B)
 {
-    std::vector<std::vector<int>> MultipliedMatrix(numberOfRows_, std::vector<int>(B.numberOfColumns_, 0));
+    std::vector<std::vector<int>> multipliedMatrix(numberOfRows_, std::vector<int>(B.numberOfColumns_, 0));
     for (int i = 0; i < numberOfRows_; i++)
     {
         for (int j = 0; j < B.numberOfColumns_; j++)
         {
             for (int k = 0; k < numberOfColumns_; k++)
             {
-                MultipliedMatrix[i][j] += matrix_[i][k] * B.matrix_[k][j];
+                multipliedMatrix[i][j] += matrix_[i][k] * B.matrix_[k][j];
             }
         }
     }
-    return Matrix(numberOfRows_, B.numberOfColumns_, MultipliedMatrix);
+    return Matrix(numberOfRows_, B.numberOfColumns_, multipliedMatrix);
 }
 
