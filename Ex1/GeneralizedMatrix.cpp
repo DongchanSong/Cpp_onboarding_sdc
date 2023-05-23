@@ -2,19 +2,19 @@
 #include <vector>
 #include <string>
 
-int DimensionFault(std::vector<std::vector<int>>);
-void DimensionFaultCheck(std::vector<std::vector<int>>, std::vector<std::vector<int>>);
+int DimensionFault(const std::vector<std::vector<int>>);
+void DimensionFaultCheck(const std::vector<std::vector<int>>, const std::vector<std::vector<int>>);
 
 class Matrix
 {
 public:
-    Matrix(int, int, std::vector<std::vector<int>>);
-    int GetNumberOfRow();
-    int GetNumberOfColumn();
-    void SetElement(int, int, int);
-    void Display();
-    Matrix AddMatrices(Matrix);
-    Matrix MultiplyMatrices(Matrix);
+    Matrix(const int, const int, const std::vector<std::vector<int>>);
+    int GetNumberOfRow() const;
+    int GetNumberOfColumn() const;
+    void SetElement(const int, const int, const int);
+    void Display() const;
+    Matrix AddMatrices(const Matrix) const;
+    Matrix MultiplyMatrices(const Matrix) const;
 
 private:
     int numberOfRows_;
@@ -24,10 +24,12 @@ private:
 
 int main()
 {
-    // std::vector<std::vector<int>> m1{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    // std::vector<std::vector<int>> m2{{2, 0, 0}, {0, 2, 0}, {0, 0, 2}};
-    std::vector<std::vector<int>> m1{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}};
-    std::vector<std::vector<int>> m2{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}};
+    std::vector<std::vector<int>> m1{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    std::vector<std::vector<int>> m2{{2, 0, 0}, {0, 2, 0}, {0, 0, 2}};
+    // std::vector<std::vector<int>> m1{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}};
+    // std::vector<std::vector<int>> m2{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}};
+    // std::vector<std::vector<int>> m1{{1, 0, 0, 0}, {0, 1, 0, 0}};
+    // std::vector<std::vector<int>> m2{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}};
     // std::vector<std::vector<int>> m1{{0}, {0, 0, 1}};
     // std::vector<std::vector<int>> m2{{1}};
 
@@ -56,7 +58,7 @@ int main()
     return 0;
 }
 
-int DimensionFault(std::vector<std::vector<int>> vect)
+int DimensionFault(const std::vector<std::vector<int>> vect)
 {
     for (int i = 0; i < vect.size(); i++)
     {
@@ -67,38 +69,48 @@ int DimensionFault(std::vector<std::vector<int>> vect)
     }
     return 0;
 }
-void DimensionFaultCheck(std::vector<std::vector<int>> vect1, std::vector<std::vector<int>> vect2)
+void DimensionFaultCheck(const std::vector<std::vector<int>> vect1, const std::vector<std::vector<int>> vect2)
 {
     if (DimensionFault(vect1) || DimensionFault(vect2))
     {
         throw std::string("Invalid matrix dimension");
     }
 }
-Matrix::Matrix(int num_row, int num_col, std::vector<std::vector<int>> vect)
+Matrix::Matrix(const int num_row, const int num_col, const std::vector<std::vector<int>> vect)
 {
     numberOfRows_ = num_row;
     numberOfColumns_ = num_col;
     matrix_ = vect;
 }
-int Matrix::GetNumberOfRow() { return matrix_.size(); }
-int Matrix::GetNumberOfColumn() { return matrix_[0].size(); }
-void Matrix::SetElement(int i, int j, int value) { matrix_[i][j] = value; }
-void Matrix::Display()
+int Matrix::GetNumberOfRow() const { return matrix_.size(); }
+int Matrix::GetNumberOfColumn() const { return matrix_[0].size(); }
+void Matrix::SetElement(const int i, const int j, const int value) { matrix_[i][j] = value; }
+void Matrix::Display() const
 {
-    for (int i = 0; i < numberOfRows_; i++)
+    if (numberOfRows_ == 0)
     {
-        for (int j = 0; j < numberOfColumns_; j++)
-        {
-            std::cout << matrix_[i][j] << "\t";
-        }
-        std::cout << std::endl
+        std::cout << "  Impossible!" << std::endl
                   << std::endl;
+    }
+    else
+    {
+        for (int i = 0; i < numberOfRows_; i++)
+        {
+            for (int j = 0; j < numberOfColumns_; j++)
+            {
+                std::cout << matrix_[i][j] << "\t";
+            }
+            std::cout << std::endl
+                      << std::endl;
+        }
     }
 }
 
-Matrix Matrix::AddMatrices(Matrix B)
+Matrix Matrix::AddMatrices(const Matrix B) const
 {
+
     DimensionFaultCheck(matrix_, B.matrix_);
+
     if (numberOfRows_ == B.numberOfRows_ && numberOfColumns_ == B.numberOfColumns_)
     {
         std::vector<std::vector<int>> addedMatrix(numberOfRows_, std::vector<int>(numberOfColumns_, 0));
@@ -113,12 +125,10 @@ Matrix Matrix::AddMatrices(Matrix B)
     }
     else
     {
-        std::cout << "3. Matrix addition is impossible" << std::endl
-                  << std::endl;
-        exit(0);
+        return Matrix(0, 0, std::vector<std::vector<int>>{{NULL}});
     }
 }
-Matrix Matrix::MultiplyMatrices(Matrix B)
+Matrix Matrix::MultiplyMatrices(const Matrix B) const
 {
     DimensionFaultCheck(matrix_, B.matrix_);
     if (numberOfColumns_ == B.numberOfRows_)
@@ -138,8 +148,6 @@ Matrix Matrix::MultiplyMatrices(Matrix B)
     }
     else
     {
-        std::cout << "4. Matrix multiplication is impossible" << std::endl
-                  << std::endl;
-        exit(0);
+        return Matrix(0, 0, std::vector<std::vector<int>>{{NULL}});
     }
 }
