@@ -82,8 +82,6 @@ void HealthShield::SPECIALMOVE(int enemyMove, int myforce, int myintellect, doub
         SpecialMoveDamage = HealthShieldDamage(myforce, myintellect, enemyforce, enemyintellect, 0.1);
         break;
     }
-
-    std::cout << "HealthShieldDamage: " << SpecialMoveDamage << std::endl;
 }
 void YukBalSanGiGaeSay::SPECIALMOVE(int enemyMove, int myforce, int myintellect, double myhealth, int enemyforce, int enemyintellect, double enemyhealth, double enemySpecialMoveDamage)
 {
@@ -103,7 +101,6 @@ void YukBalSanGiGaeSay::SPECIALMOVE(int enemyMove, int myforce, int myintellect,
         myhurt = enemySpecialMoveDamage;
         break;
     }
-    std::cout << "YukBalSanGiGaeSayDamage: " << SpecialMoveDamage << std::endl;
 }
 
 void Player::SetForce(int force) { myForce = force; }
@@ -188,20 +185,18 @@ double Player::MyHurtCalculation(int myMove, int enemyMove, Player enemy)
     {
     case MoveOptions::Attack:
         this->Attack(enemyMove, enemy);
-        return myHurt;
+        break;
     case MoveOptions::Defend:
         this->Defend(enemyMove, enemy);
-        return myHurt;
+        break;
     case MoveOptions::Counterattack:
         this->Counterattack(enemyMove, enemy);
-        return myHurt;
+        break;
     case MoveOptions::SpecialMove:
         this->SpecialMove(enemyMove, enemy);
-        return myHurt;
-    default:
-        std::cout << "Invalid move number" << std::endl;
-        return 0;
+        break;
     }
+    return myHurt;
 }
 
 DongChan::DongChan(int force, int intellect, double health)
@@ -233,35 +228,42 @@ int main()
     std::deque<int> moveDeque = MakeMoveDeque(dequeSize);
     MovePrediction(dequeSize, predictionNumber, moveDeque);
 
-    std::cout << "Choose your move in this round (select a number and press enter key)" << std::endl
-              << "0:Attack / 1:Defend / 2:Counterattack / 3:SpecialMove" << std::endl
-              << std::endl;
-
     int roundNumber = 1;
-    // int enemyMove = moveDeque.at(roundNumber - 1);
-    // int myMove;
-    // std::cin >> myMove;
-    int myMove = 3;    // temp
-    int enemyMove = 3; // temp
+    do
+    {
+        std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)" << std::endl
+                  << "0:Attack / 1:Defend / 2:Counterattack / 3:SpecialMove" << std::endl
+                  << std::endl;
+        int enemyMove = moveDeque.at(roundNumber - 1);
+        int myMove;
+        std::cin >> myMove;
 
-    std::cout << "my Move: " << ToString((MoveOptions)myMove) << std::endl;
-    std::cout << "enemy Move: " << ToString((MoveOptions)moveDeque.at(0)) << std::endl;
-    std::cout << "my basic damage: " << (50 - (enemy.GetForce() - me.GetForce())) * 0.5 << std::endl;
-    std::cout << "enemy basic damage: " << (50 - (me.GetForce() - enemy.GetForce())) * 0.5 << std::endl;
-    std::cout << std::endl;
+        double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
+        double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
 
-    double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
-    double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
+        enemy.SetHealth(enemy.GetHealth() - enemyhurt);
+        me.SetHealth(me.GetHealth() - myhurt);
 
-    // std::cout << myhurt << std::endl;
-    // std::cout << enemyhurt << std::endl;
+        std::cout << std::endl
+                  << "Round " << roundNumber << ") "
+                  << "You: " << ToString(myMove)
+                  << ", Enemy: " << ToString(moveDeque.at(roundNumber - 1)) << std::endl;
 
-    enemy.SetHealth(enemy.GetHealth() - enemyhurt);
-    me.SetHealth(me.GetHealth() - myhurt);
+        printHealth(me.GetHealth(), enemy.GetHealth());
+        roundNumber++;
+    } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
 
-    std::cout << "my health in main: " << me.GetHealth() << std::endl;
-    std::cout << "enemy health in main: " << enemy.GetHealth() << std::endl;
-    std::cout << std::endl;
-
+    if ((me.GetHealth() <= 0 && enemy.GetHealth() <= 0) || me.GetHealth() == enemy.GetHealth())
+    {
+        std::cout << "Draw!" << std::endl;
+    }
+    else if (me.GetHealth() > enemy.GetHealth())
+    {
+        std::cout << "You win!" << std::endl;
+    }
+    else if (me.GetHealth() < enemy.GetHealth())
+    {
+        std::cout << "Enemy win!" << std::endl;
+    }
     return 0;
 }

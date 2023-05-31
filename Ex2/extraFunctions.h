@@ -11,22 +11,25 @@ enum MoveOptions
     Counterattack,
     SpecialMove
 };
-const char *ToString(MoveOptions);
+const char *ToString(int);
 std::deque<int> MakeMoveDeque(int);
 void MovePrediction(int, int, std::deque<int>);
+void printHealth(double, double);
+void printNonNegativeNumber(double);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const char *ToString(MoveOptions moveName)
+
+const char *ToString(int moveNumber)
 {
-    switch (moveName)
+    switch (moveNumber)
     {
-    case Attack:
+    case MoveOptions::Attack:
         return "Attack";
-    case Defend:
+    case MoveOptions::Defend:
         return "Defend";
-    case Counterattack:
+    case MoveOptions::Counterattack:
         return "Counterattack";
-    case SpecialMove:
+    case MoveOptions::SpecialMove:
         return "SpecialMove";
     default:
         return 0; // temp
@@ -71,6 +74,7 @@ void MovePrediction(int dequeSize, int predictionNumber, std::deque<int> moveDeq
     std::cout << "HangWoo’s Move Prediction: " << std::endl;
     for (int i = 0; i < dequeSize; i++)
     {
+        std::cout << "Round " << i + 1 << ": ";
         if (movePrediction[i] == 0)
         {
             std::cout << "???";
@@ -86,4 +90,36 @@ void MovePrediction(int dequeSize, int predictionNumber, std::deque<int> moveDeq
     }
     std::cout << std::endl
               << std::endl;
+}
+void printNonNegativeNumber(double health)
+{
+    if (health <= 0)
+    {
+        std::cout << 0;
+    }
+    else
+    {
+        std::cout << health;
+    }
+}
+void printHealth(double myhealth, double enemyhealth)
+{
+    std::cout << "Health -> You: ";
+    printNonNegativeNumber(myhealth);
+    std::cout << ", Enemy: ";
+    printNonNegativeNumber(enemyhealth);
+
+    if (myhealth <= 0 && enemyhealth <= 0)
+    {
+        std::cout << ", Both died..." << std::endl;
+    }
+    else if (myhealth <= 0)
+    {
+        std::cout << ", You died..." << std::endl;
+    }
+    else if (enemyhealth <= 0)
+    {
+        std::cout << ", Enemy died..." << std::endl;
+    }
+    std::cout << std::endl;
 }
