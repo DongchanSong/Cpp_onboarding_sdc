@@ -229,14 +229,14 @@ int main()
     MovePrediction(dequeSize, predictionNumber, moveDeque);
 
     int roundNumber = 1;
+    bool specialMoveLimit = false;
     do
     {
-        std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)" << std::endl
-                  << "0:Attack / 1:Defend / 2:Counterattack / 3:SpecialMove" << std::endl
-                  << std::endl;
+        std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)\n"
+                  << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\nSelected move number: ";
+
         int enemyMove = moveDeque.at(roundNumber - 1);
-        int myMove;
-        std::cin >> myMove;
+        int myMove = CheckMoveNumber(specialMoveLimit);
 
         double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
         double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
@@ -244,26 +244,13 @@ int main()
         enemy.SetHealth(enemy.GetHealth() - enemyhurt);
         me.SetHealth(me.GetHealth() - myhurt);
 
-        std::cout << std::endl
-                  << "Round " << roundNumber << ") "
-                  << "You: " << ToString(myMove)
-                  << ", Enemy: " << ToString(moveDeque.at(roundNumber - 1)) << std::endl;
+        std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(moveDeque.at(roundNumber - 1)) << "\n";
 
         printHealth(me.GetHealth(), enemy.GetHealth());
         roundNumber++;
     } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
 
-    if ((me.GetHealth() <= 0 && enemy.GetHealth() <= 0) || me.GetHealth() == enemy.GetHealth())
-    {
-        std::cout << "Draw!" << std::endl;
-    }
-    else if (me.GetHealth() > enemy.GetHealth())
-    {
-        std::cout << "You win!" << std::endl;
-    }
-    else if (me.GetHealth() < enemy.GetHealth())
-    {
-        std::cout << "Enemy win!" << std::endl;
-    }
+    printResult(me.GetHealth(), enemy.GetHealth());
+
     return 0;
 }

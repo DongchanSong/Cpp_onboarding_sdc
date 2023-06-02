@@ -6,7 +6,7 @@
 
 enum MoveOptions
 {
-    Attack,
+    Attack = 1,
     Defend,
     Counterattack,
     SpecialMove
@@ -16,6 +16,8 @@ std::deque<int> MakeMoveDeque(int);
 void MovePrediction(int, int, std::deque<int>);
 void printHealth(double, double);
 void printNonNegativeNumber(double);
+void printResult(double, double);
+int CheckMoveNumber(bool &);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,10 +40,10 @@ const char *ToString(int moveNumber)
 std::deque<int> MakeMoveDeque(int dequeSize)
 {
     std::deque<int> moveDeque;
-    int specialMoveCount = 0;
+    bool specialMoveLimited = false;
     for (int i = 0; i < dequeSize; i++)
     {
-        if (specialMoveCount >= 1)
+        if (specialMoveLimited == true)
         {
             moveDeque.push_back(rand() % (MoveOptions::Counterattack - MoveOptions::Attack + 1) + MoveOptions::Attack);
         }
@@ -50,7 +52,7 @@ std::deque<int> MakeMoveDeque(int dequeSize)
             moveDeque.push_back(rand() % (MoveOptions::SpecialMove - MoveOptions::Attack + 1) + MoveOptions::Attack);
             if (moveDeque.at(i) == MoveOptions::SpecialMove)
             {
-                specialMoveCount++;
+                specialMoveLimited = true;
             }
         }
     }
@@ -111,15 +113,78 @@ void printHealth(double myhealth, double enemyhealth)
 
     if (myhealth <= 0 && enemyhealth <= 0)
     {
-        std::cout << ", Both died..." << std::endl;
+        std::cout << ", Both died...";
     }
     else if (myhealth <= 0)
     {
-        std::cout << ", You died..." << std::endl;
+        std::cout << ", You died...";
     }
     else if (enemyhealth <= 0)
     {
-        std::cout << ", Enemy died..." << std::endl;
+        std::cout << ", Enemy died...";
     }
-    std::cout << std::endl;
+    std::cout << "\n\n";
+}
+
+void printResult(double myHealth, double enemyHealth)
+{
+
+    if ((myHealth <= 0 && enemyHealth <= 0) || myHealth == enemyHealth)
+    {
+        std::cout << "Draw!" << std::endl;
+    }
+    else if (myHealth > enemyHealth)
+    {
+        std::cout << "You win!" << std::endl;
+    }
+    else if (myHealth < enemyHealth)
+    {
+        std::cout << "Enemy win!" << std::endl;
+    }
+}
+
+int CheckMoveNumber(bool &specialMoveLimit)
+{
+    int myMove;
+    while (true)
+    {
+        std::cin >> myMove;
+
+        try
+        {
+            switch (myMove)
+            {
+            case MoveOptions::Attack:
+            case MoveOptions::Defend:
+            case MoveOptions::Counterattack:
+                break;
+            case MoveOptions::SpecialMove:
+                if (specialMoveLimit == false)
+                {
+                    specialMoveLimit = true;
+                    break;
+                }
+                else
+                {
+                    throw "You can use SpecialMove only once.\nPlease put the number again: ";
+                }
+            default:
+                throw myMove;
+            }
+        }
+        catch (const char *errorMessage)
+        {
+            std::cout << errorMessage;
+            continue;
+        }
+        catch (int myMove)
+        {
+            std::cout << std::to_string(myMove) + " is an invalid move number.\nPlease put the number again: ";
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            continue;
+        }
+        break;
+    }
+    return myMove;
 }
