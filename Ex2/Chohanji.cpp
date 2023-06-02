@@ -179,6 +179,7 @@ void Player::SpecialMove(int enemyMove, Player enemy)
     myHurt = specialmove->myhurt;
     mySpecialMoveDamage = specialmove->SpecialMoveDamage;
 }
+
 double Player::MyHurtCalculation(int myMove, int enemyMove, Player enemy)
 {
     switch (myMove)
@@ -230,25 +231,31 @@ int main()
 
     int roundNumber = 1;
     bool specialMoveLimit = false;
-    do
-    {
-        std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)\n"
-                  << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\nSelected move number: ";
 
-        int enemyMove = moveDeque.at(roundNumber - 1);
-        int myMove = CheckMoveNumber(specialMoveLimit);
+    std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)\n"
+              << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\nSelected move number: ";
 
-        double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
-        double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
+    int enemyMove = moveDeque.at(roundNumber - 1);
 
-        enemy.SetHealth(enemy.GetHealth() - enemyhurt);
-        me.SetHealth(me.GetHealth() - myhurt);
+    // do
+    // {
+    //     std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)\n"
+    //               << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\nSelected move number: ";
 
-        std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(moveDeque.at(roundNumber - 1)) << "\n";
+    //     int enemyMove = moveDeque.at(roundNumber - 1);
+    //     int myMove = CheckMoveNumber(specialMoveLimit);
 
-        printHealth(me.GetHealth(), enemy.GetHealth());
-        roundNumber++;
-    } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
+    //     double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
+    //     double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
+
+    //     enemy.SetHealth(enemy.GetHealth() - enemyhurt);
+    //     me.SetHealth(me.GetHealth() - myhurt);
+
+    //     std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(moveDeque.at(roundNumber - 1)) << "\n";
+
+    //     printHealth(me.GetHealth(), enemy.GetHealth());
+    //     roundNumber++;
+    // } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
 
     printResult(me.GetHealth(), enemy.GetHealth());
 

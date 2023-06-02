@@ -9,7 +9,8 @@ enum MoveOptions
     Attack = 1,
     Defend,
     Counterattack,
-    SpecialMove
+    SpecialMove,
+    DoNothing
 };
 const char *ToString(int);
 std::deque<int> MakeMoveDeque(int);
@@ -32,6 +33,8 @@ const char *ToString(int moveNumber)
     case MoveOptions::Counterattack:
         return "Counterattack";
     case MoveOptions::SpecialMove:
+        return "SpecialMove";
+    case MoveOptions::DoNothing:
         return "SpecialMove";
     default:
         return 0; // temp
