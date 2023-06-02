@@ -13,12 +13,13 @@ enum MoveOptions
     DoNothing
 };
 const char *ToString(int);
-std::deque<int> MakeMoveDeque(int);
-void MovePrediction(int, int, std::deque<int>);
+std::deque<int> MakeEnemyMoveDeque(int);
+void EnemyMovePrediction(int, int, std::deque<int>);
 void printHealth(double, double);
 void printNonNegativeNumber(double);
 void printResult(double, double);
-int CheckMoveNumber(bool &);
+// int CheckMoveNumber(bool &);
+std::deque<int> MakeMyMoveDeque(int);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,7 +41,7 @@ const char *ToString(int moveNumber)
         return 0; // temp
     }
 }
-std::deque<int> MakeMoveDeque(int dequeSize)
+std::deque<int> MakeEnemyMoveDeque(int dequeSize)
 {
     std::deque<int> moveDeque;
     bool specialMoveLimited = false;
@@ -61,7 +62,7 @@ std::deque<int> MakeMoveDeque(int dequeSize)
     }
     return moveDeque;
 }
-void MovePrediction(int dequeSize, int predictionNumber, std::deque<int> moveDeque)
+void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> moveDeque)
 {
     std::deque<int> numberDeque;
     int movePrediction[dequeSize];
@@ -79,7 +80,7 @@ void MovePrediction(int dequeSize, int predictionNumber, std::deque<int> moveDeq
     std::cout << "HangWoo’s Move Prediction: " << std::endl;
     for (int i = 0; i < dequeSize; i++)
     {
-        std::cout << "Round " << i + 1 << ": ";
+        std::cout << "Round #" << i + 1 << ": ";
         if (movePrediction[i] == 0)
         {
             std::cout << "???";
@@ -126,23 +127,22 @@ void printHealth(double myhealth, double enemyhealth)
     {
         std::cout << ", Enemy died...";
     }
-    std::cout << "\n\n";
+    std::cout << "\n";
 }
 
 void printResult(double myHealth, double enemyHealth)
 {
-
     if ((myHealth <= 0 && enemyHealth <= 0) || myHealth == enemyHealth)
     {
-        std::cout << "Draw!" << std::endl;
+        std::cout << "\n***** Result: Draw! *****\n\n";
     }
     else if (myHealth > enemyHealth)
     {
-        std::cout << "You win!" << std::endl;
+        std::cout << "\n***** Result: You win! *****\n\n";
     }
     else if (myHealth < enemyHealth)
     {
-        std::cout << "Enemy win!" << std::endl;
+        std::cout << "\n***** Result: Enemy win! *****\n\n";
     }
 }
 
@@ -190,4 +190,59 @@ int CheckMoveNumber(bool &specialMoveLimit)
         break;
     }
     return myMove;
+}
+
+std::deque<int> MakeMyMoveDeque(int dequeSize)
+{
+    std::cout << "Choose your moves (select a number and press enter key)\n"
+              << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\n\n";
+    std::deque<int> myMoveDeque;
+    int myMove;
+    bool specialMoveLimit = false;
+    for (int i = 0; i < dequeSize; i++)
+    {
+        while (true)
+        {
+            std::cout << "Round #" << i + 1 << ": ";
+            std::cin >> myMove;
+            try
+            {
+                switch (myMove)
+                {
+                case MoveOptions::Attack:
+                case MoveOptions::Defend:
+                case MoveOptions::Counterattack:
+                    myMoveDeque.push_back(myMove);
+                    break;
+                case MoveOptions::SpecialMove:
+                    if (specialMoveLimit == false)
+                    {
+                        myMoveDeque.push_back(myMove);
+                        specialMoveLimit = true;
+                        break;
+                    }
+                    else
+                    {
+                        throw "You can use SpecialMove only once. Please put the number again.\n";
+                    }
+                default:
+                    throw myMove;
+                }
+            }
+            catch (const char *errorMessage)
+            {
+                std::cout << errorMessage;
+                continue;
+            }
+            catch (int myMove)
+            {
+                std::cout << std::to_string(myMove) + " is an invalid move number. Please put the number again.\n";
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                continue;
+            }
+            break;
+        }
+    }
+    return myMoveDeque;
 }

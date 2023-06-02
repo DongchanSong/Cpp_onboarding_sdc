@@ -226,37 +226,28 @@ int main()
     int dequeSize = 5;
     int predictionNumber = round((me.GetIntellect() - enemy.GetIntellect()) * 0.1);
 
-    std::deque<int> moveDeque = MakeMoveDeque(dequeSize);
-    MovePrediction(dequeSize, predictionNumber, moveDeque);
+    std::deque<int> enemyMoveDeque = MakeEnemyMoveDeque(dequeSize);
+    EnemyMovePrediction(dequeSize, predictionNumber, enemyMoveDeque);
+
+    std::deque<int> myMoveDeque = MakeMyMoveDeque(dequeSize);
 
     int roundNumber = 1;
-    bool specialMoveLimit = false;
+    do
+    {
+        int enemyMove = enemyMoveDeque.at(roundNumber - 1);
+        int myMove = myMoveDeque.at(roundNumber - 1);
 
-    std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)\n"
-              << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\nSelected move number: ";
+        double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
+        double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
 
-    int enemyMove = moveDeque.at(roundNumber - 1);
+        enemy.SetHealth(enemy.GetHealth() - enemyhurt);
+        me.SetHealth(me.GetHealth() - myhurt);
 
-    // do
-    // {
-    //     std::cout << "[Round " << roundNumber << "] Choose your move in this round (select a number and press enter key)\n"
-    //               << "1:Attack / 2:Defend / 3:Counterattack / 4:SpecialMove\nSelected move number: ";
+        std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(enemyMoveDeque.at(roundNumber - 1)) << "\n";
 
-    //     int enemyMove = moveDeque.at(roundNumber - 1);
-    //     int myMove = CheckMoveNumber(specialMoveLimit);
-
-    //     double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
-    //     double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
-
-    //     enemy.SetHealth(enemy.GetHealth() - enemyhurt);
-    //     me.SetHealth(me.GetHealth() - myhurt);
-
-    //     std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(moveDeque.at(roundNumber - 1)) << "\n";
-
-    //     printHealth(me.GetHealth(), enemy.GetHealth());
-    //     roundNumber++;
-    // } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
-
+        printHealth(me.GetHealth(), enemy.GetHealth());
+        roundNumber++;
+    } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
     printResult(me.GetHealth(), enemy.GetHealth());
 
     return 0;
