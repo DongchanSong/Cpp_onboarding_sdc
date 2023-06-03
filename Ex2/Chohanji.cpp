@@ -44,6 +44,7 @@ public:
     void Defend(int, Player);
     void Counterattack(int, Player);
     void SpecialMove(int, Player);
+    void DoNothing(int, Player);
 
     double MyHurtCalculation(int, int, Player);
 
@@ -180,6 +181,24 @@ void Player::SpecialMove(int enemyMove, Player enemy)
     mySpecialMoveDamage = specialmove->SpecialMoveDamage;
 }
 
+void Player::DoNothing(int enemyMove, Player enemy)
+{
+    switch (enemyMove)
+    {
+    case MoveOptions::Attack:
+        myHurt = (50 - (myForce - enemy.GetForce())) * 0.5;
+        break;
+    case MoveOptions::Defend:
+    case MoveOptions::Counterattack:
+        myHurt = 0;
+        break;
+    case MoveOptions::SpecialMove:
+        enemy.SpecialMove(MoveOptions::Attack, *this);
+        myHurt = enemy.GetSpecialMoveDamage();
+        break;
+    }
+}
+
 double Player::MyHurtCalculation(int myMove, int enemyMove, Player enemy)
 {
     switch (myMove)
@@ -195,6 +214,9 @@ double Player::MyHurtCalculation(int myMove, int enemyMove, Player enemy)
         break;
     case MoveOptions::SpecialMove:
         this->SpecialMove(enemyMove, enemy);
+        break;
+    case MoveOptions::DoNothing:
+        this->DoNothing(enemyMove, enemy);
         break;
     }
     return myHurt;
@@ -218,7 +240,6 @@ HangWoo::HangWoo(int force, int intellect, double health)
 int main()
 {
     srand(time(NULL));
-    // srand(7);
 
     DongChan me(rand() % (80 - 60 + 1) + 60, rand() % (100 - 70 + 1) + 70, 100);
     HangWoo enemy(100, 50, 100);
@@ -231,11 +252,16 @@ int main()
 
     std::deque<int> myMoveDeque = MakeMyMoveDeque(dequeSize);
 
+    bool myDoNothingFlag = false;
+    bool enemyDoNothingFlag = false;
     int roundNumber = 1;
     do
     {
-        int enemyMove = enemyMoveDeque.at(roundNumber - 1);
         int myMove = myMoveDeque.at(roundNumber - 1);
+        int enemyMove = enemyMoveDeque.at(roundNumber - 1);
+
+        DoNothingCheck(myDoNothingFlag, myMove, enemyMove);
+        DoNothingCheck(enemyDoNothingFlag, enemyMove, myMove);
 
         double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
         double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
@@ -244,8 +270,8 @@ int main()
         me.SetHealth(me.GetHealth() - myhurt);
 
         std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(enemyMoveDeque.at(roundNumber - 1)) << "\n";
-
         printHealth(me.GetHealth(), enemy.GetHealth());
+
         roundNumber++;
     } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
     printResult(me.GetHealth(), enemy.GetHealth());

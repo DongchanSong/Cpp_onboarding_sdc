@@ -18,8 +18,8 @@ void EnemyMovePrediction(int, int, std::deque<int>);
 void printHealth(double, double);
 void printNonNegativeNumber(double);
 void printResult(double, double);
-// int CheckMoveNumber(bool &);
 std::deque<int> MakeMyMoveDeque(int);
+void DoNothingCheck(bool &, int &, int);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +36,7 @@ const char *ToString(int moveNumber)
     case MoveOptions::SpecialMove:
         return "SpecialMove";
     case MoveOptions::DoNothing:
-        return "SpecialMove";
+        return "DoNothing";
     default:
         return 0; // temp
     }
@@ -245,4 +245,17 @@ std::deque<int> MakeMyMoveDeque(int dequeSize)
         }
     }
     return myMoveDeque;
+}
+
+void DoNothingCheck(bool &myDoNothingFlag, int &myMove, int enemyMove)
+{
+    if (myDoNothingFlag == true)
+    {
+        myMove = MoveOptions::DoNothing;
+        myDoNothingFlag = false;
+    }
+    if (myMove == MoveOptions::Counterattack && enemyMove == MoveOptions::Defend)
+    {
+        myDoNothingFlag = true;
+    }
 }
