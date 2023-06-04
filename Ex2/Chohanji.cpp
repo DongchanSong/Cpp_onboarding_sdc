@@ -1,4 +1,4 @@
-#include "extraFunctions.h"
+#include "GlobalFunctions.h"
 
 class ISpecialMove
 {

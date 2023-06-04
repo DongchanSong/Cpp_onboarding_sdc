@@ -1,17 +1,14 @@
+#ifndef GLOBALFUNCTIONS_H
+#define GLOBALFUNCTIONS_H
+
 #include <iostream>
+#include <deque>
+#include "GlobalFunctions.h"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include <deque>
+#include "MoveOptions.h"
 
-enum MoveOptions
-{
-    Attack = 1,
-    Defend,
-    Counterattack,
-    SpecialMove,
-    DoNothing
-};
 const char *ToString(int);
 std::deque<int> MakeEnemyMoveDeque(int);
 void EnemyMovePrediction(int, int, std::deque<int>);
@@ -257,3 +254,5 @@ void DoNothingCheck(bool &myDoNothingFlag, int &myMove, int enemyMove)
         myDoNothingFlag = true;
     }
 }
+
+#endif
