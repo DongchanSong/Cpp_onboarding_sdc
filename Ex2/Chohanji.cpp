@@ -1,17 +1,11 @@
-// #include <iostream>
-// #include <cstdlib>
-// #include <ctime>
-// #include <cmath>
-// #include <deque>
 #include "extraFunctions.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ISpecialMove
 {
 public:
     virtual void SPECIALMOVE(int, int, int, double, int, int, double, double) = 0;
-    double SpecialMoveDamage;
-    double myhurt;
+    double specialMoveDamage_;
+    double myhurt_;
 };
 class HealthShield : public ISpecialMove
 {
@@ -49,11 +43,11 @@ public:
     double MyHurtCalculation(int, int, Player);
 
 protected:
-    int myForce;
-    int myIntellect;
-    double myHealth;
-    double myHurt;
-    double mySpecialMoveDamage;
+    int myForce_;
+    int myIntellect_;
+    double myHealth_;
+    double myHurt_;
+    double myspecialMoveDamage_;
 };
 class DongChan : public Player
 {
@@ -66,21 +60,20 @@ public:
     HangWoo(int, int, double);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double HealthShield::HealthShieldDamage(int myforce, int myintellect, int enemyforce, int enemyintellect, double weightingfactor)
 {
     return (50 - (enemyforce - myforce)) * 0.5 + (myintellect + abs(myintellect - enemyintellect)) * weightingfactor;
 }
 void HealthShield::SPECIALMOVE(int enemyMove, int myforce, int myintellect, double myhealth, int enemyforce, int enemyintellect, double enemyhealth, double enemySpecialMoveDamage)
 {
-    myhurt = 0;
+    myhurt_ = 0;
     switch (enemyMove)
     {
     case MoveOptions::Defend:
-        SpecialMoveDamage = HealthShieldDamage(myforce, myintellect, enemyforce, enemyintellect, 0.2);
+        specialMoveDamage_ = HealthShieldDamage(myforce, myintellect, enemyforce, enemyintellect, 0.2);
         break;
     default:
-        SpecialMoveDamage = HealthShieldDamage(myforce, myintellect, enemyforce, enemyintellect, 0.1);
+        specialMoveDamage_ = HealthShieldDamage(myforce, myintellect, enemyforce, enemyintellect, 0.1);
         break;
     }
 }
@@ -89,47 +82,47 @@ void YukBalSanGiGaeSay::SPECIALMOVE(int enemyMove, int myforce, int myintellect,
     switch (enemyMove)
     {
     case MoveOptions::Attack:
-        SpecialMoveDamage = myhealth;
-        myhurt = (50 - (myforce - enemyforce)) * 0.5;
+        specialMoveDamage_ = myhealth;
+        myhurt_ = (50 - (myforce - enemyforce)) * 0.5;
         break;
     case MoveOptions::Defend:
     case MoveOptions::Counterattack:
-        SpecialMoveDamage = myhealth;
-        myhurt = 0;
+        specialMoveDamage_ = myhealth;
+        myhurt_ = 0;
         break;
     case MoveOptions::SpecialMove:
-        SpecialMoveDamage = 0;
-        myhurt = enemySpecialMoveDamage;
+        specialMoveDamage_ = 0;
+        myhurt_ = enemySpecialMoveDamage;
         break;
     }
 }
 
-void Player::SetForce(int force) { myForce = force; }
-void Player::SetIntellect(int intellect) { myIntellect = intellect; }
-void Player::SetHealth(double health) { myHealth = health; }
-void Player::SetSpecialMoveDamage(double specialmovedamage) { mySpecialMoveDamage = specialmovedamage; }
+void Player::SetForce(int force) { myForce_ = force; }
+void Player::SetIntellect(int intellect) { myIntellect_ = intellect; }
+void Player::SetHealth(double health) { myHealth_ = health; }
+void Player::SetSpecialMoveDamage(double specialmovedamage) { myspecialMoveDamage_ = specialmovedamage; }
 
-int Player::GetForce() { return myForce; }
-int Player::GetIntellect() { return myIntellect; }
-double Player::GetHealth() { return myHealth; }
-double Player::GetSpecialMoveDamage() { return mySpecialMoveDamage; }
+int Player::GetForce() { return myForce_; }
+int Player::GetIntellect() { return myIntellect_; }
+double Player::GetHealth() { return myHealth_; }
+double Player::GetSpecialMoveDamage() { return myspecialMoveDamage_; }
 
 void Player::Attack(int enemyMove, Player enemy)
 {
     switch (enemyMove)
     {
     case MoveOptions::Attack:
-        myHurt = (50 - (myForce - enemy.GetForce())) * 0.5;
+        myHurt_ = (50 - (myForce_ - enemy.GetForce())) * 0.5;
         break;
     case MoveOptions::Defend:
-        myHurt = 0;
+        myHurt_ = 0;
         break;
     case MoveOptions::Counterattack:
-        myHurt = (50 - (enemy.GetForce() - myForce)) * 0.5;
+        myHurt_ = (50 - (enemy.GetForce() - myForce_)) * 0.5;
         break;
     case MoveOptions::SpecialMove:
         enemy.SpecialMove(MoveOptions::Attack, *this);
-        myHurt = enemy.GetSpecialMoveDamage();
+        myHurt_ = enemy.GetSpecialMoveDamage();
         break;
     }
 }
@@ -138,15 +131,14 @@ void Player::Defend(int enemyMove, Player enemy)
     switch (enemyMove)
     {
     case MoveOptions::Counterattack:
-        myHurt = 20;
-        /*상대방의 다음 합은 무효가 됩니다!*/
+        myHurt_ = 20;
         break;
     case MoveOptions::SpecialMove:
         enemy.SpecialMove(MoveOptions::Defend, *this);
-        myHurt = 0.5 * enemy.GetSpecialMoveDamage();
+        myHurt_ = 0.5 * enemy.GetSpecialMoveDamage();
         break;
     default:
-        myHurt = 0;
+        myHurt_ = 0;
         break;
     }
 }
@@ -155,30 +147,29 @@ void Player::Counterattack(int enemyMove, Player enemy)
     switch (enemyMove)
     {
     case MoveOptions::Attack:
-        myHurt = 10;
+        myHurt_ = 10;
         break;
     case MoveOptions::Defend:
-        myHurt = 0;
-        /*당신의 다음 합은 무효가 됩니다*/
+        myHurt_ = 0;
         break;
     case MoveOptions::Counterattack:
-        myHurt = (50 - (myForce - enemy.GetForce())) * 0.5;
+        myHurt_ = (50 - (myForce_ - enemy.GetForce())) * 0.5;
         break;
     case MoveOptions::SpecialMove:
         enemy.SpecialMove(MoveOptions::Counterattack, *this);
-        myHurt = 0.5 * enemy.GetSpecialMoveDamage();
+        myHurt_ = 0.5 * enemy.GetSpecialMoveDamage();
         break;
     }
 }
 void Player::SpecialMove(int enemyMove, Player enemy)
 {
-    specialmove->SPECIALMOVE(enemyMove, myForce, myIntellect, myHealth, enemy.GetForce(), enemy.GetIntellect(), enemy.GetHealth(), enemy.GetSpecialMoveDamage());
+    specialmove->SPECIALMOVE(enemyMove, myForce_, myIntellect_, myHealth_, enemy.GetForce(), enemy.GetIntellect(), enemy.GetHealth(), enemy.GetSpecialMoveDamage());
     if (enemyMove == MoveOptions::SpecialMove)
     {
         enemy.SpecialMove(MoveOptions::Counterattack, *this);
     }
-    myHurt = specialmove->myhurt;
-    mySpecialMoveDamage = specialmove->SpecialMoveDamage;
+    myHurt_ = specialmove->myhurt_;
+    myspecialMoveDamage_ = specialmove->specialMoveDamage_;
 }
 
 void Player::DoNothing(int enemyMove, Player enemy)
@@ -186,15 +177,15 @@ void Player::DoNothing(int enemyMove, Player enemy)
     switch (enemyMove)
     {
     case MoveOptions::Attack:
-        myHurt = (50 - (myForce - enemy.GetForce())) * 0.5;
+        myHurt_ = (50 - (myForce_ - enemy.GetForce())) * 0.5;
         break;
     case MoveOptions::Defend:
     case MoveOptions::Counterattack:
-        myHurt = 0;
+        myHurt_ = 0;
         break;
     case MoveOptions::SpecialMove:
         enemy.SpecialMove(MoveOptions::Attack, *this);
-        myHurt = enemy.GetSpecialMoveDamage();
+        myHurt_ = enemy.GetSpecialMoveDamage();
         break;
     }
 }
@@ -219,7 +210,7 @@ double Player::MyHurtCalculation(int myMove, int enemyMove, Player enemy)
         this->DoNothing(enemyMove, enemy);
         break;
     }
-    return myHurt;
+    return myHurt_;
 }
 
 DongChan::DongChan(int force, int intellect, double health)
@@ -270,11 +261,11 @@ int main()
         me.SetHealth(me.GetHealth() - myhurt);
 
         std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(enemyMoveDeque.at(roundNumber - 1)) << "\n";
-        printHealth(me.GetHealth(), enemy.GetHealth());
+        PrintHealth(me.GetHealth(), enemy.GetHealth());
 
         roundNumber++;
     } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth());
-    printResult(me.GetHealth(), enemy.GetHealth());
+    PrintResult(me.GetHealth(), enemy.GetHealth());
 
     return 0;
 }

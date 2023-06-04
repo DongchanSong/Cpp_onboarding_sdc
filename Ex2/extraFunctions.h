@@ -15,13 +15,11 @@ enum MoveOptions
 const char *ToString(int);
 std::deque<int> MakeEnemyMoveDeque(int);
 void EnemyMovePrediction(int, int, std::deque<int>);
-void printHealth(double, double);
-void printNonNegativeNumber(double);
-void printResult(double, double);
+void PrintHealth(double, double);
+void PrintNonNegativeNumber(double);
+void PrintResult(double, double);
 std::deque<int> MakeMyMoveDeque(int);
 void DoNothingCheck(bool &, int &, int);
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const char *ToString(int moveNumber)
 {
@@ -97,7 +95,7 @@ void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> mo
     std::cout << std::endl
               << std::endl;
 }
-void printNonNegativeNumber(double health)
+void PrintNonNegativeNumber(double health)
 {
     if (health <= 0)
     {
@@ -108,12 +106,12 @@ void printNonNegativeNumber(double health)
         std::cout << health;
     }
 }
-void printHealth(double myhealth, double enemyhealth)
+void PrintHealth(double myhealth, double enemyhealth)
 {
     std::cout << "Health -> You: ";
-    printNonNegativeNumber(myhealth);
+    PrintNonNegativeNumber(myhealth);
     std::cout << ", Enemy: ";
-    printNonNegativeNumber(enemyhealth);
+    PrintNonNegativeNumber(enemyhealth);
 
     if (myhealth <= 0 && enemyhealth <= 0)
     {
@@ -130,7 +128,7 @@ void printHealth(double myhealth, double enemyhealth)
     std::cout << "\n";
 }
 
-void printResult(double myHealth, double enemyHealth)
+void PrintResult(double myHealth, double enemyHealth)
 {
     if ((myHealth <= 0 && enemyHealth <= 0) || myHealth == enemyHealth)
     {
