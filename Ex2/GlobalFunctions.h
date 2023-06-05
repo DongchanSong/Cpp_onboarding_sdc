@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <deque>
-#include "GlobalFunctions.h"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -139,52 +138,6 @@ void PrintResult(double myHealth, double enemyHealth)
     {
         std::cout << "\n***** Result: Enemy win! *****\n\n";
     }
-}
-
-int CheckMoveNumber(bool &specialMoveLimit)
-{
-    int myMove;
-    while (true)
-    {
-        std::cin >> myMove;
-
-        try
-        {
-            switch (myMove)
-            {
-            case MoveOptions::Attack:
-            case MoveOptions::Defend:
-            case MoveOptions::Counterattack:
-                break;
-            case MoveOptions::SpecialMove:
-                if (specialMoveLimit == false)
-                {
-                    specialMoveLimit = true;
-                    break;
-                }
-                else
-                {
-                    throw "You can use SpecialMove only once.\nPlease put the number again: ";
-                }
-            default:
-                throw myMove;
-            }
-        }
-        catch (const char *errorMessage)
-        {
-            std::cout << errorMessage;
-            continue;
-        }
-        catch (int myMove)
-        {
-            std::cout << std::to_string(myMove) + " is an invalid move number.\nPlease put the number again: ";
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            continue;
-        }
-        break;
-    }
-    return myMove;
 }
 
 std::deque<int> MakeMyMoveDeque(int dequeSize)
