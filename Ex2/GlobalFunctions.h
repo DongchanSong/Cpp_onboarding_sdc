@@ -10,7 +10,7 @@
 
 const char *ToString(int);
 std::deque<int> MakeEnemyMoveDeque(int);
-void EnemyMovePrediction(int, int, std::deque<int>);
+void EnemyMovePrediction(int, int, std::deque<int> &);
 void PrintHealth(double, double);
 void PrintNonNegativeNumber(double);
 void PrintResult(double, double);
@@ -56,7 +56,7 @@ std::deque<int> MakeEnemyMoveDeque(int dequeSize)
     }
     return moveDeque;
 }
-void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> moveDeque)
+void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> &moveDeque)
 {
     std::deque<int> numberDeque;
     int movePrediction[dequeSize];

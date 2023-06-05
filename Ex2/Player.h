@@ -19,13 +19,13 @@ public:
     double GetHealth();
     double GetSpecialMoveDamage();
 
-    void Attack(int, Player);
-    void Defend(int, Player);
-    void Counterattack(int, Player);
-    void SpecialMove(int, Player);
-    void DoNothing(int, Player);
+    void Attack(int, Player &);
+    void Defend(int, Player &);
+    void Counterattack(int, Player &);
+    void SpecialMove(int, Player &);
+    void DoNothing(int, Player &);
 
-    double MyHurtCalculation(int, int, Player);
+    double MyHurtCalculation(int, int, Player &);
 
 protected:
     int myForce_;
@@ -55,7 +55,7 @@ int Player::GetIntellect() { return myIntellect_; }
 double Player::GetHealth() { return myHealth_; }
 double Player::GetSpecialMoveDamage() { return myspecialMoveDamage_; }
 
-void Player::Attack(int enemyMove, Player enemy)
+void Player::Attack(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
@@ -74,7 +74,7 @@ void Player::Attack(int enemyMove, Player enemy)
         break;
     }
 }
-void Player::Defend(int enemyMove, Player enemy)
+void Player::Defend(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
@@ -90,7 +90,7 @@ void Player::Defend(int enemyMove, Player enemy)
         break;
     }
 }
-void Player::Counterattack(int enemyMove, Player enemy)
+void Player::Counterattack(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
@@ -109,7 +109,7 @@ void Player::Counterattack(int enemyMove, Player enemy)
         break;
     }
 }
-void Player::SpecialMove(int enemyMove, Player enemy)
+void Player::SpecialMove(int enemyMove, Player &enemy)
 {
     specialmove->SPECIALMOVE(enemyMove, myForce_, myIntellect_, myHealth_, enemy.GetForce(), enemy.GetIntellect(), enemy.GetHealth(), enemy.GetSpecialMoveDamage());
     if (enemyMove == MoveOptions::SpecialMove)
@@ -120,7 +120,7 @@ void Player::SpecialMove(int enemyMove, Player enemy)
     myspecialMoveDamage_ = specialmove->specialMoveDamage_;
 }
 
-void Player::DoNothing(int enemyMove, Player enemy)
+void Player::DoNothing(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
@@ -138,7 +138,7 @@ void Player::DoNothing(int enemyMove, Player enemy)
     }
 }
 
-double Player::MyHurtCalculation(int myMove, int enemyMove, Player enemy)
+double Player::MyHurtCalculation(int myMove, int enemyMove, Player &enemy)
 {
     switch (myMove)
     {
