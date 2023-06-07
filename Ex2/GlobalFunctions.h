@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <algorithm>
+#include <random>
 #include "MoveOptions.h"
 
 const char *ToString(int);
@@ -56,26 +58,24 @@ std::deque<int> MakeEnemyMoveDeque(int dequeSize)
     }
     return moveDeque;
 }
+
 void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> &moveDeque)
 {
-    std::deque<int> numberDeque;
-    int movePrediction[dequeSize];
-    for (int i = 0; i < dequeSize; i++)
-    {
-        numberDeque.push_back(i);
-        movePrediction[i] = 0;
-    }
+    std::deque<bool> predictionDeque(dequeSize, false);
     for (int i = 0; i < predictionNumber; i++)
     {
-        int moveIndex = rand() % (dequeSize - i);
-        movePrediction[numberDeque.at(moveIndex)] = 1;
-        numberDeque.erase(numberDeque.begin() + moveIndex);
+        predictionDeque.push_back(true);
     }
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(predictionDeque.begin(), predictionDeque.end(), g);
+
     std::cout << "HangWoo’s Move Prediction: " << std::endl;
     for (int i = 0; i < dequeSize; i++)
     {
         std::cout << "Round #" << i + 1 << ": ";
-        if (movePrediction[i] == 0)
+        if (predictionDeque[i] == false)
         {
             std::cout << "???";
         }
