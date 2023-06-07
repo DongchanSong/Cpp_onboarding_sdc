@@ -59,17 +59,17 @@ void Player::Attack(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
-    case MoveOptions::Attack:
+    case int(MoveOptions::Attack):
         myHurt_ = (50 - (myForce_ - enemy.GetForce())) * 0.5;
         break;
-    case MoveOptions::Defend:
+    case int(MoveOptions::Defend):
         myHurt_ = 0;
         break;
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Counterattack):
         myHurt_ = (50 - (enemy.GetForce() - myForce_)) * 0.5;
         break;
-    case MoveOptions::SpecialMove:
-        enemy.SpecialMove(MoveOptions::Attack, *this);
+    case int(MoveOptions::SpecialMove):
+        enemy.SpecialMove(int(MoveOptions::Attack), *this);
         myHurt_ = enemy.GetSpecialMoveDamage();
         break;
     }
@@ -78,11 +78,11 @@ void Player::Defend(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Counterattack):
         myHurt_ = 20;
         break;
-    case MoveOptions::SpecialMove:
-        enemy.SpecialMove(MoveOptions::Defend, *this);
+    case int(MoveOptions::SpecialMove):
+        enemy.SpecialMove(int(MoveOptions::Defend), *this);
         myHurt_ = 0.5 * enemy.GetSpecialMoveDamage();
         break;
     default:
@@ -94,17 +94,17 @@ void Player::Counterattack(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
-    case MoveOptions::Attack:
+    case int(MoveOptions::Attack):
         myHurt_ = 10;
         break;
-    case MoveOptions::Defend:
+    case int(MoveOptions::Defend):
         myHurt_ = 0;
         break;
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Counterattack):
         myHurt_ = (50 - (myForce_ - enemy.GetForce())) * 0.5;
         break;
-    case MoveOptions::SpecialMove:
-        enemy.SpecialMove(MoveOptions::Counterattack, *this);
+    case int(MoveOptions::SpecialMove):
+        enemy.SpecialMove(int(MoveOptions::Counterattack), *this);
         myHurt_ = 0.5 * enemy.GetSpecialMoveDamage();
         break;
     }
@@ -112,9 +112,9 @@ void Player::Counterattack(int enemyMove, Player &enemy)
 void Player::SpecialMove(int enemyMove, Player &enemy)
 {
     specialmove->SPECIALMOVE(enemyMove, myForce_, myIntellect_, myHealth_, enemy.GetForce(), enemy.GetIntellect(), enemy.GetHealth(), enemy.GetSpecialMoveDamage());
-    if (enemyMove == MoveOptions::SpecialMove)
+    if (enemyMove == int(MoveOptions::SpecialMove))
     {
-        enemy.SpecialMove(MoveOptions::Counterattack, *this);
+        enemy.SpecialMove(int(MoveOptions::Counterattack), *this);
     }
     myHurt_ = specialmove->myhurt_;
     myspecialMoveDamage_ = specialmove->specialMoveDamage_;
@@ -124,15 +124,15 @@ void Player::DoNothing(int enemyMove, Player &enemy)
 {
     switch (enemyMove)
     {
-    case MoveOptions::Attack:
+    case int(MoveOptions::Attack):
         myHurt_ = (50 - (myForce_ - enemy.GetForce())) * 0.5;
         break;
-    case MoveOptions::Defend:
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Defend):
+    case int(MoveOptions::Counterattack):
         myHurt_ = 0;
         break;
-    case MoveOptions::SpecialMove:
-        enemy.SpecialMove(MoveOptions::Attack, *this);
+    case int(MoveOptions::SpecialMove):
+        enemy.SpecialMove(int(MoveOptions::Attack), *this);
         myHurt_ = enemy.GetSpecialMoveDamage();
         break;
     }
@@ -142,19 +142,19 @@ double Player::MyHurtCalculation(int myMove, int enemyMove, Player &enemy)
 {
     switch (myMove)
     {
-    case MoveOptions::Attack:
+    case int(MoveOptions::Attack):
         this->Attack(enemyMove, enemy);
         break;
-    case MoveOptions::Defend:
+    case int(MoveOptions::Defend):
         this->Defend(enemyMove, enemy);
         break;
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Counterattack):
         this->Counterattack(enemyMove, enemy);
         break;
-    case MoveOptions::SpecialMove:
+    case int(MoveOptions::SpecialMove):
         this->SpecialMove(enemyMove, enemy);
         break;
-    case MoveOptions::DoNothing:
+    case int(MoveOptions::DoNothing):
         this->DoNothing(enemyMove, enemy);
         break;
     }

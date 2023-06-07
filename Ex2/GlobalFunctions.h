@@ -21,15 +21,15 @@ const char *ToString(int moveNumber)
 {
     switch (moveNumber)
     {
-    case MoveOptions::Attack:
+    case int(MoveOptions::Attack):
         return "Attack";
-    case MoveOptions::Defend:
+    case int(MoveOptions::Defend):
         return "Defend";
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Counterattack):
         return "Counterattack";
-    case MoveOptions::SpecialMove:
+    case int(MoveOptions::SpecialMove):
         return "SpecialMove";
-    case MoveOptions::DoNothing:
+    case int(MoveOptions::DoNothing):
         return "DoNothing";
     default:
         return 0; // temp
@@ -43,12 +43,12 @@ std::deque<int> MakeEnemyMoveDeque(int dequeSize)
     {
         if (specialMoveLimited == true)
         {
-            moveDeque.push_back(rand() % (MoveOptions::Counterattack - MoveOptions::Attack + 1) + MoveOptions::Attack);
+            moveDeque.push_back(rand() % (int(MoveOptions::Counterattack) - int(MoveOptions::Attack) + 1) + int(MoveOptions::Attack));
         }
         else
         {
-            moveDeque.push_back(rand() % (MoveOptions::SpecialMove - MoveOptions::Attack + 1) + MoveOptions::Attack);
-            if (moveDeque.at(i) == MoveOptions::SpecialMove)
+            moveDeque.push_back(rand() % (int(MoveOptions::SpecialMove) - int(MoveOptions::Attack) + 1) + int(MoveOptions::Attack));
+            if (moveDeque.at(i) == int(MoveOptions::SpecialMove))
             {
                 specialMoveLimited = true;
             }
@@ -81,7 +81,7 @@ void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> &m
         }
         else
         {
-            std::cout << ToString((MoveOptions)moveDeque.at(i));
+            std::cout << ToString(moveDeque.at(i));
         }
         if (i < dequeSize - 1)
         {
@@ -157,12 +157,12 @@ std::deque<int> MakeMyMoveDeque(int dequeSize)
             {
                 switch (myMove)
                 {
-                case MoveOptions::Attack:
-                case MoveOptions::Defend:
-                case MoveOptions::Counterattack:
+                case int(MoveOptions::Attack):
+                case int(MoveOptions::Defend):
+                case int(MoveOptions::Counterattack):
                     myMoveDeque.push_back(myMove);
                     break;
-                case MoveOptions::SpecialMove:
+                case int(MoveOptions::SpecialMove):
                     if (specialMoveLimit == false)
                     {
                         myMoveDeque.push_back(myMove);
@@ -199,10 +199,10 @@ void DoNothingCheck(bool &myDoNothingFlag, int &myMove, int enemyMove)
 {
     if (myDoNothingFlag == true)
     {
-        myMove = MoveOptions::DoNothing;
+        myMove = int(MoveOptions::DoNothing);
         myDoNothingFlag = false;
     }
-    if (myMove == MoveOptions::Counterattack && enemyMove == MoveOptions::Defend)
+    if (myMove == int(MoveOptions::Counterattack) && enemyMove == int(MoveOptions::Defend))
     {
         myDoNothingFlag = true;
     }

@@ -1,7 +1,7 @@
 #ifndef MOVEOPTIONS_H
 #define MOVEOPTIONS_H
 
-enum MoveOptions
+enum class MoveOptions
 {
     Attack = 1,
     Defend,

@@ -32,7 +32,7 @@ void HealthShield::SPECIALMOVE(int enemyMove, int myforce, int myintellect, doub
     myhurt_ = 0;
     switch (enemyMove)
     {
-    case MoveOptions::Defend:
+    case int(MoveOptions::Defend):
         specialMoveDamage_ = HealthShieldDamage(myforce, myintellect, enemyforce, enemyintellect, 0.2);
         break;
     default:
@@ -44,16 +44,16 @@ void YukBalSanGiGaeSay::SPECIALMOVE(int enemyMove, int myforce, int myintellect,
 {
     switch (enemyMove)
     {
-    case MoveOptions::Attack:
+    case int(MoveOptions::Attack):
         specialMoveDamage_ = myhealth;
         myhurt_ = (50 - (myforce - enemyforce)) * 0.5;
         break;
-    case MoveOptions::Defend:
-    case MoveOptions::Counterattack:
+    case int(MoveOptions::Defend):
+    case int(MoveOptions::Counterattack):
         specialMoveDamage_ = myhealth;
         myhurt_ = 0;
         break;
-    case MoveOptions::SpecialMove:
+    case int(MoveOptions::SpecialMove):
         specialMoveDamage_ = 0;
         myhurt_ = enemySpecialMoveDamage;
         break;
