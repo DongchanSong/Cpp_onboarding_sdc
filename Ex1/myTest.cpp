@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "Matrix.h"
 
 std::vector<std::vector<int>> m1{{1}};

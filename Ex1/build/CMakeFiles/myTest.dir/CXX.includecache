@@ -425,8 +425,6 @@ ExtraFunctions.h
 /home/dongchansong/C_C++_Projects/Ex1/myTest.cpp
 gtest/gtest.h
 -
-gmock/gmock.h
--
 Matrix.h
 /home/dongchansong/C_C++_Projects/Ex1/Matrix.h
 
