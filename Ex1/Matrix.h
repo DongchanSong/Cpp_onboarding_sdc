@@ -9,6 +9,7 @@ public:
     Matrix(const int, const int, std::vector<std::vector<int>>);
     int GetNumberOfRow() const;
     int GetNumberOfColumn() const;
+    std::vector<std::vector<int>> GetTwoDimensionVector();
     void SetElement(const int, const int, const int);
     void Display() const;
     Matrix AddMatrices(Matrix &) const;
@@ -28,6 +29,7 @@ Matrix::Matrix(const int num_row, const int num_col, std::vector<std::vector<int
 }
 int Matrix::GetNumberOfRow() const { return matrix_.size(); }
 int Matrix::GetNumberOfColumn() const { return matrix_[0].size(); }
+std::vector<std::vector<int>> Matrix::GetTwoDimensionVector() { return matrix_; }
 void Matrix::SetElement(const int i, const int j, const int value) { matrix_[i][j] = value; }
 void Matrix::Display() const
 {
