@@ -37,7 +37,7 @@ int main()
         PrintHealth(me.GetHealth(), enemy.GetHealth());
 
         roundNumber++;
-    } while (roundNumber <= dequeSize && (me.GetHealth() > 0 && enemy.GetHealth() > 0));
+    } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth() > 0);
     PrintResult(me.GetHealth(), enemy.GetHealth());
 
     return 0;

@@ -171,7 +171,8 @@ std::deque<int> MakeMyMoveDeque(int dequeSize)
                     }
                     else
                     {
-                        throw "You can use SpecialMove only once. Please put the number again.\n";
+                        const char *errorMessage = "You can use SpecialMove only once. Please put the number again.\n";
+                        throw errorMessage;
                     }
                 default:
                     throw myMove;
