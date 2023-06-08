@@ -1,23 +1,24 @@
 #include "GlobalFunctions.h"
-#include "Player.h"
+#include "Character.h"
 
 int main()
 {
-    srand(time(NULL));
+    // 객체 생성
+    Character *me = new DongChan;
+    Character *enemy = new HangWoo;
 
-    DongChan me(rand() % (80 - 60 + 1) + 60, rand() % (100 - 70 + 1) + 70, 100);
-    HangWoo enemy(100, 50, 100);
-
+    // Move 덱 생성
     int dequeSize = 5;
-
     std::deque<int> enemyMoveDeque = MakeEnemyMoveDeque(dequeSize);
-    EnemyMovePrediction(me.GetIntellect(), enemy.GetIntellect(), dequeSize, enemyMoveDeque);
-
+    EnemyMovePrediction(me->GetIntellect(), enemy->GetIntellect(), dequeSize, enemyMoveDeque);
     std::deque<int> myMoveDeque = MakeMyMoveDeque(dequeSize);
 
+    // 일기토에 필요한 Flag 및 #라운드
     bool myDoNothingFlag = false;
     bool enemyDoNothingFlag = false;
     int roundNumber = 1;
+
+    // 일기토
     do
     {
         int myMove = myMoveDeque.at(roundNumber - 1);
@@ -26,18 +27,23 @@ int main()
         DoNothingCheck(myDoNothingFlag, myMove, enemyMove);
         DoNothingCheck(enemyDoNothingFlag, enemyMove, myMove);
 
-        double myhurt = me.MyHurtCalculation(myMove, enemyMove, enemy);
-        double enemyhurt = enemy.MyHurtCalculation(enemyMove, myMove, me);
+        me->SetBehavior(myMove);
+        enemy->SetBehavior(enemyMove);
 
-        enemy.SetHealth(enemy.GetHealth() - enemyhurt);
-        me.SetHealth(me.GetHealth() - myhurt);
+        double myhurt = me->PerformBehavior(enemy);
+        double enemyhurt = enemy->PerformBehavior(me);
+
+        me->SetHealth(me->GetHealth() - myhurt);
+        enemy->SetHealth(enemy->GetHealth() - enemyhurt);
 
         std::cout << "\nRound " << roundNumber << ") You: " << ToString(myMove) << ", Enemy: " << ToString(enemyMoveDeque.at(roundNumber - 1)) << "\n";
-        PrintHealth(me.GetHealth(), enemy.GetHealth());
+        PrintHealth(me->GetHealth(), enemy->GetHealth());
 
         roundNumber++;
-    } while (roundNumber <= dequeSize && me.GetHealth() > 0 && enemy.GetHealth() > 0);
-    PrintResult(me.GetHealth(), enemy.GetHealth());
+    } while (roundNumber <= dequeSize && me->GetHealth() > 0 && enemy->GetHealth() > 0);
+
+    // 승자 출력
+    PrintResult(me->GetHealth(), enemy->GetHealth());
 
     return 0;
 }
