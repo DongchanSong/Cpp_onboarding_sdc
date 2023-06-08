@@ -9,10 +9,9 @@ int main()
     HangWoo enemy(100, 50, 100);
 
     int dequeSize = 5;
-    int predictionNumber = round((me.GetIntellect() - enemy.GetIntellect()) * 0.1);
 
     std::deque<int> enemyMoveDeque = MakeEnemyMoveDeque(dequeSize);
-    EnemyMovePrediction(dequeSize, predictionNumber, enemyMoveDeque);
+    EnemyMovePrediction(me.GetIntellect(), enemy.GetIntellect(), dequeSize, enemyMoveDeque);
 
     std::deque<int> myMoveDeque = MakeMyMoveDeque(dequeSize);
 

@@ -21,6 +21,9 @@ Matrix matrix8(m8.size(), m8[0].size(), m8);
 
 TEST(GetNumberOfRowTest, GetNumberOfRow)
 {
+
+    // EXPECT_EQ(matrix2.GetNumberOfRow(), 3);
+    // ASSERT_EQ(matrix2.GetNumberOfRow(), 3);
     GTEST_ASSERT_EQ(matrix1.GetNumberOfRow(), 1);
     GTEST_ASSERT_EQ(matrix2.GetNumberOfRow(), 2);
     GTEST_ASSERT_EQ(matrix3.GetNumberOfRow(), 3);
@@ -35,6 +38,8 @@ TEST(AddMatricesTest, AddMatrices)
             GTEST_ASSERT_EQ((matrix1.AddMatrices(matrix4)).GetTwoDimensionVector()[i][j], matrix5.GetTwoDimensionVector()[i][j]);
         }
     }
+
+    GTEST_ASSERT_EQ(matrix5.GetTwoDimensionVector(), matrix1.AddMatrices(matrix4).GetTwoDimensionVector());
 }
 
 TEST(MultiplyMatricesTest, MultiplyMatrices)

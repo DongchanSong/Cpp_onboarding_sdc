@@ -12,7 +12,7 @@
 
 const char *ToString(int);
 std::deque<int> MakeEnemyMoveDeque(int);
-void EnemyMovePrediction(int, int, std::deque<int> &);
+void EnemyMovePrediction(int, int, int, std::deque<int> &);
 void PrintHealth(double, double);
 void PrintNonNegativeNumber(double);
 void PrintResult(double, double);
@@ -39,6 +39,8 @@ const char *ToString(int moveNumber)
 }
 std::deque<int> MakeEnemyMoveDeque(int dequeSize)
 {
+
+    srand(time(NULL));
     std::deque<int> moveDeque;
     bool specialMoveLimited = false;
     for (int i = 0; i < dequeSize; i++)
@@ -59,9 +61,11 @@ std::deque<int> MakeEnemyMoveDeque(int dequeSize)
     return moveDeque;
 }
 
-void EnemyMovePrediction(int dequeSize, int predictionNumber, std::deque<int> &moveDeque)
+void EnemyMovePrediction(int myIntellect, int enemyintellect, int dequeSize, std::deque<int> &moveDeque)
 {
+    int predictionNumber = round((myIntellect - enemyintellect) * 0.1);
     std::deque<bool> predictionDeque(dequeSize, false);
+
     for (int i = 0; i < predictionNumber; i++)
     {
         predictionDeque.push_back(true);
