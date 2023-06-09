@@ -34,12 +34,11 @@ const char *ToString(int moveNumber)
     case int(MoveOptions::DoNothing):
         return "DoNothing";
     default:
-        return 0; // temp
+        return 0;
     }
 }
 std::deque<int> MakeEnemyMoveDeque(int dequeSize)
 {
-
     srand(time(NULL));
     std::deque<int> moveDeque;
     bool specialMoveLimited = false;
@@ -63,6 +62,7 @@ std::deque<int> MakeEnemyMoveDeque(int dequeSize)
 
 void EnemyMovePrediction(int myIntellect, int enemyintellect, int dequeSize, std::deque<int> &moveDeque)
 {
+
     int predictionNumber = round((myIntellect - enemyintellect) * 0.1);
     std::deque<bool> predictionDeque(dequeSize, false);
 

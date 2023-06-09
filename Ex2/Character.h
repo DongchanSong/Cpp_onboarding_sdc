@@ -18,14 +18,12 @@ public:
 
     // SpecialMove가 Character에 dependent하여 SetBehavior 함수를 추상화함
     virtual void SetBehavior(int) = 0;
-
-    double PerformBehavior(Character *enemy) { return behavior->MyHurtCalculation(force_, enemy->GetForce(), enemy->GetIntellect(), enemy->GetHealth(), enemy->GetBehavior()); }
+    double PerformBehavior(Character *enemy) { return (enemy->GetBehavior())->MyHurtCalculation(force_, enemy->GetForce(), enemy->GetIntellect(), enemy->GetHealth(), behavior); }
 
 protected:
     int force_;
     int intellect_;
     int health_;
-    IBehavior *behavior_;
 };
 
 class DongChan : public Character

@@ -19,7 +19,7 @@ public:
 class Attack : public IBehavior
 {
 public:
-    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *enemy) { return enemy->VersusAttack(myForce, enemyForce); }
+    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *me) { return me->VersusAttack(myForce, enemyForce); }
     double VersusAttack(int myForce, int enemyForce) { return 0.5 * (50 - (myForce - enemyForce)); }
     double VersusDefend() { return 0; }
     double VersusCounterattack(int myForce, int enemyForce) { return 0.5 * (50 - (enemyForce - myForce)); }
@@ -31,7 +31,7 @@ public:
 class Defend : public IBehavior
 {
 public:
-    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *enemy) { return enemy->VersusDefend(); }
+    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *me) { return me->VersusDefend(); }
     double VersusAttack(int myForce, int enemyForce) { return 0; }
     double VersusDefend() { return 0; }
     double VersusCounterattack(int myForce, int enemyForce) { return 20; }
@@ -43,7 +43,7 @@ public:
 class Counterattck : public IBehavior
 {
 public:
-    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *enemy) { return enemy->VersusCounterattack(myForce, enemyForce); }
+    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *me) { return me->VersusCounterattack(myForce, enemyForce); }
     double VersusAttack(int myForce, int enemyForce) { return 10; }
     double VersusDefend() { return 0; }
     double VersusCounterattack(int myForce, int enemyForce) { return 0.5 * (50 - (myForce - enemyForce)); }
@@ -55,7 +55,7 @@ public:
 class HealthShield : public IBehavior
 {
 public:
-    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *enemy) { return enemy->VersusHealthShield(myForce, enemyForce, enemyIntellect); }
+    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *me) { return me->VersusHealthShield(myForce, enemyForce, enemyIntellect); }
     double VersusAttack(int myForce, int enemyForce) { return 0; }
     double VersusDefend() { return 0; }
     double VersusCounterattack(int myForce, int enemyForce) { return 0; }
@@ -67,7 +67,7 @@ public:
 class YukBalSanGiGaeSay : public IBehavior
 {
 public:
-    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *enemy) { return enemy->VersusYukBalSanGiGaeSay(enemyHealth); }
+    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *me) { return me->VersusYukBalSanGiGaeSay(enemyHealth); }
     double VersusAttack(int myForce, int enemyForce) { return 0.5 * (50 - (myForce - enemyForce)); }
     double VersusDefend() { return 0; }
     double VersusCounterattack(int myForce, int enemyForce) { return 0; }
@@ -79,7 +79,7 @@ public:
 class DoNothing : public IBehavior
 {
 public:
-    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *enemy) { return enemy->VersusDoNothing(); }
+    double MyHurtCalculation(int myForce, int enemyForce, int enemyIntellect, double enemyHealth, IBehavior *me) { return me->VersusDoNothing(); }
     double VersusAttack(int myForce, int enemyForce) { return 0.5 * (50 - (myForce - enemyForce)); }
     double VersusDefend() { return 0; }
     double VersusCounterattack(int myForce, int enemyForce) { return 0; }
