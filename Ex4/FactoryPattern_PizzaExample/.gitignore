@@ -1,0 +1,9 @@
+
+Silver.~ml
+cscope.files
+cscope.out
+tags
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+build/
