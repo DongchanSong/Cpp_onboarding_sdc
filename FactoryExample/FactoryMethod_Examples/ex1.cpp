@@ -94,6 +94,7 @@ int main()
   Creator *creator = new ConcreteCreator1();
   std::cout << creator->SomeOperation() << std::endl;
   std::cout << std::endl;
+
   Creator *creator2 = new ConcreteCreator2();
   std::cout << creator2->SomeOperation() << std::endl;
   std::cout << std::endl;

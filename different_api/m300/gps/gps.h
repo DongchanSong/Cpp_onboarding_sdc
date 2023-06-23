@@ -5,7 +5,8 @@
 #ifndef LIBM300_GPS_HPP
 #define LIBM300_GPS_HPP
 
-class M300Gps {
+class M300Gps
+{
 public:
     M300Gps();
     ~M300Gps();
@@ -16,7 +17,8 @@ public:
      */
     float GetGpsNum();
 
-    enum class GPS_HEALTH {
+    enum class GPS_HEALTH
+    {
         NONE = 0,
         OPERATIONAL = 1,
         OPTIMAL = 2
@@ -28,7 +30,8 @@ public:
      */
     M300Gps::GPS_HEALTH GetGpsHealth();
 
-    enum class RTK_CONNECTION {
+    enum class RTK_CONNECTION
+    {
         DISCONNECTED = 0,
         CONNECTED = 1
     };
@@ -40,4 +43,4 @@ public:
     M300Gps::RTK_CONNECTION GetRtkConnection();
 };
 
-#endif  // LIBM300_GPS_HPP
+#endif // LIBM300_GPS_HPP
