@@ -2,10 +2,19 @@
 #include "different_api/m300/navigation/navigation.cc"
 #include "different_api/m300/sensor_data/sensor_data.cc"
 #include "different_api/m300/status/status.cc"
+
 #include "different_api/m600/gps/gps.cc"
 #include "different_api/m600/navigation/navigation.cc"
 #include "different_api/m600/sensor_data/sensor_data.cc"
 #include "different_api/m600/status/status.cc"
+
+#include "different_api/mavic/gps/gps.cc"
+#include "different_api/mavic/sensor/camera_data/camera_data.cc"
+#include "different_api/mavic/sensor/gimbal_data/gimbal_data.cc"
+#include "different_api/mavic/sensor/integrated_navigation/integrated_navigation.cc"
+#include "different_api/mavic/sensor/lidar_data/lidar_data.cc"
+#include "different_api/mavic/sensor/visual_data/visual_data.cc"
+#include "different_api/mavic/status/status.cc"
 
 #include <iostream>
 
@@ -93,7 +102,36 @@ class VehicleData_M600 : public VehicleData
 
     void SetCameraData() { cameraData_ = m600SensorData->GetCameraData(); }
     void SetGimbalData() { gimbalData_ = m600SensorData->GetGimbalData(); }
+    // void SetDistanceData() { throw std::runtime_error("Distance data unavailable"); }
     void SetDistanceData() { std::cout << "M600: Distance data unavailable" << std::endl; }
+};
+
+class VehicleData_Mavic : public VehicleData
+{
+public:
+    MavicGps *mavicGps;
+    MavicCameraData *mavicCameraData;
+    MavicGimbalData *mavicGimbalData;
+    MavicIntegratedNavigation *mavicIntegratedNavigation;
+    MavicLidarData *mavicLidarData;
+    MavicVisualData *mavicVisualData;
+    MavicStatus *mavicStatus;
+
+    void SetGPSNum() { gpsNum_ = mavicGps->GetGpsNum(); }
+    void SetGPSHealth() { gpsHealth_ = int(mavicGps->GetGpsHealth()); }
+    void SetPosNED() { posNED_ = mavicIntegratedNavigation->GetPosNed(); }
+    void SetPosLLH() { posLLH_ = mavicIntegratedNavigation->GetPosLlh(); }
+    void SetVelHdg() { velHdg_ = mavicIntegratedNavigation->GetVelHdg(); }
+    void SetEuler() { euler_ = mavicIntegratedNavigation->GetEuler(); }
+
+    void SetFlightStatus() { flightStatus_ = int(mavicStatus->GetFlightStatus()); }
+    void SetGimbalStatus() { gimbalStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::GIMBAL)); }
+    void SetCameraStatus() { cameraStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::CAMERA)); }
+    void SetDistanceStatus() { distanceStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::LIDAR)); }
+
+    void SetCameraData() { cameraData_ = mavicCameraData->GetCameraData(); }
+    void SetGimbalData() { gimbalData_ = mavicGimbalData->GetGimbalData(); }
+    void SetDistanceData() { distanceData_ = mavicLidarData->GetTopLidarDistance(); }
 };
 
 class FcInputImpl
@@ -144,6 +182,15 @@ public:
     }
 };
 
+class FcInputImpl_Mavic : public FcInputImpl
+{
+public:
+    VehicleData *CreateVehicle() const override
+    {
+        return new VehicleData_Mavic();
+    }
+};
+
 int main()
 {
     FcInputImpl *fcM300 = new FcInputImpl_M300();
@@ -152,7 +199,11 @@ int main()
     FcInputImpl *fcM600 = new FcInputImpl_M600();
     VehicleData *dataM600 = fcM600->FromApiToMc();
 
+    FcInputImpl *fcMavic = new FcInputImpl_Mavic();
+    VehicleData *dataMavic = fcMavic->FromApiToMc();
+
     delete fcM300;
     delete fcM600;
+    delete fcMavic;
     return 0;
 }
