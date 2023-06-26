@@ -82,6 +82,7 @@ public:
 };
 class VehicleData_M600 : public VehicleData
 {
+public:
     M600Gps *m600Gps;
     M600Navigation *m600Navigation;
     M600SensorData *m600SensorData;
@@ -91,8 +92,9 @@ class VehicleData_M600 : public VehicleData
     void SetGPSHealth() { gpsHealth_ = int(m600Gps->GetGpsHealth()); }
     void SetPosNED() { posNED_ = m600Navigation->GetPosNed(); }
     void SetPosLLH() { posLLH_ = m600Navigation->GetPosLlh(); }
-    void SetVelHdg() { velHdg_ = m600Navigation->GetVelBody(); } //// body to heading transform 필요
     void SetEuler() { euler_ = m600Navigation->GetEuler(); }
+    void HdgToBody() { dcmH2B_ = nlab::lib::Dcmf(nlab::lib::Eulerf(euler_(0), euler_(1), 0.0f)); }
+    void SetVelHdg() { velHdg_ = dcmH2B_.transpose() * (m600Navigation->GetVelBody()); } //// body to heading transform 필요
 
     void SetFlightStatus() { flightStatus_ = int(m600Status->GetFlightStatus()); }
     void SetGimbalStatus() { gimbalStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::GIMBAL)); }
@@ -104,6 +106,9 @@ class VehicleData_M600 : public VehicleData
     void SetGimbalData() { gimbalData_ = m600SensorData->GetGimbalData(); }
     // void SetDistanceData() { throw std::runtime_error("Distance data unavailable"); }
     void SetDistanceData() { std::cout << "M600: Distance data unavailable" << std::endl; }
+
+private:
+    nlab::lib::Dcmf dcmH2B_ = {};
 };
 
 class VehicleData_Mavic : public VehicleData
@@ -205,5 +210,6 @@ int main()
     delete fcM300;
     delete fcM600;
     delete fcMavic;
+
     return 0;
 }
