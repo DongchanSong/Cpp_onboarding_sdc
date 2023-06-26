@@ -64,21 +64,21 @@ public:
     M300SensorData *m300SensorData;
     M300Status *m300Status;
 
-    void SetGPSNum() { gpsNum_ = m300Gps->GetGpsNum(); }
-    void SetGPSHealth() { gpsHealth_ = int(m300Gps->GetGpsHealth()); }
-    void SetPosNED() { posNED_ = m300Navigation->GetPosNed(); }
-    void SetPosLLH() { posLLH_ = m300Navigation->GetPosLlh(); }
-    void SetVelHdg() { velHdg_ = m300Navigation->GetVelHdg(); }
-    void SetEuler() { euler_ = m300Navigation->GetEuler(); }
+    void SetGPSNum() override { gpsNum_ = m300Gps->GetGpsNum(); }
+    void SetGPSHealth() override { gpsHealth_ = int(m300Gps->GetGpsHealth()); }
+    void SetPosNED() override { posNED_ = m300Navigation->GetPosNed(); }
+    void SetPosLLH() override { posLLH_ = m300Navigation->GetPosLlh(); }
+    void SetVelHdg() override { velHdg_ = m300Navigation->GetVelHdg(); }
+    void SetEuler() override { euler_ = m300Navigation->GetEuler(); }
 
-    void SetFlightStatus() { flightStatus_ = int(m300Status->GetFlightStatus()); }
-    void SetGimbalStatus() { gimbalStatus_ = int(m300Status->GetPayloadStatus(M300Status::PAYLOAD_TYPE::GIMBAL)); }
-    void SetCameraStatus() { cameraStatus_ = int(m300Status->GetPayloadStatus(M300Status::PAYLOAD_TYPE::CAMERA)); }
-    void SetDistanceStatus() { distanceStatus_ = int(m300Status->GetPayloadStatus(M300Status::PAYLOAD_TYPE::SONAR)); }
+    void SetFlightStatus() override { flightStatus_ = int(m300Status->GetFlightStatus()); }
+    void SetGimbalStatus() override { gimbalStatus_ = int(m300Status->GetPayloadStatus(M300Status::PAYLOAD_TYPE::GIMBAL)); }
+    void SetCameraStatus() override { cameraStatus_ = int(m300Status->GetPayloadStatus(M300Status::PAYLOAD_TYPE::CAMERA)); }
+    void SetDistanceStatus() override { distanceStatus_ = int(m300Status->GetPayloadStatus(M300Status::PAYLOAD_TYPE::SONAR)); }
 
-    void SetCameraData() { cameraData_ = m300SensorData->GetCameraData(); }
-    void SetGimbalData() { gimbalData_ = m300SensorData->GetGimbalData(); }
-    void SetDistanceData() { distanceData_ = m300SensorData->GetSonarData(); }
+    void SetCameraData() override { cameraData_ = m300SensorData->GetCameraData(); }
+    void SetGimbalData() override { gimbalData_ = m300SensorData->GetGimbalData(); }
+    void SetDistanceData() override { distanceData_ = m300SensorData->GetSonarData(); }
 };
 class VehicleData_M600 : public VehicleData
 {
@@ -88,24 +88,27 @@ public:
     M600SensorData *m600SensorData;
     M600Status *m600Status;
 
-    void SetGPSNum() { gpsNum_ = m600Gps->GetGpsNum(); }
-    void SetGPSHealth() { gpsHealth_ = int(m600Gps->GetGpsHealth()); }
-    void SetPosNED() { posNED_ = m600Navigation->GetPosNed(); }
-    void SetPosLLH() { posLLH_ = m600Navigation->GetPosLlh(); }
-    void SetEuler() { euler_ = m600Navigation->GetEuler(); }
-    void HdgToBody() { dcmH2B_ = nlab::lib::Dcmf(nlab::lib::Eulerf(euler_(0), euler_(1), 0.0f)); }
-    void SetVelHdg() { velHdg_ = dcmH2B_.transpose() * (m600Navigation->GetVelBody()); } //// body to heading transform 필요
+    void SetGPSNum() override { gpsNum_ = m600Gps->GetGpsNum(); }
+    void SetGPSHealth() override { gpsHealth_ = int(m600Gps->GetGpsHealth()); }
+    void SetPosNED() override { posNED_ = m600Navigation->GetPosNed(); }
+    void SetPosLLH() override { posLLH_ = m600Navigation->GetPosLlh(); }
+    void SetVelHdg() override
+    {
+        dcmH2B_ = nlab::lib::Dcmf(nlab::lib::Eulerf(euler_(0), euler_(1), 0.0f));
+        velHdg_ = dcmH2B_.transpose() * (m600Navigation->GetVelBody());
+    }
+    void SetEuler() override { euler_ = m600Navigation->GetEuler(); }
 
-    void SetFlightStatus() { flightStatus_ = int(m600Status->GetFlightStatus()); }
-    void SetGimbalStatus() { gimbalStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::GIMBAL)); }
-    void SetCameraStatus() { cameraStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::CAMERA)); }
-    // void SetDistanceStatus() { m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE(-1)); }
-    void SetDistanceStatus() { std::cout << "M600: Distance status unavailable" << std::endl; }
+    void SetFlightStatus() override { flightStatus_ = int(m600Status->GetFlightStatus()); }
+    void SetGimbalStatus() override { gimbalStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::GIMBAL)); }
+    void SetCameraStatus() override { cameraStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::CAMERA)); }
+    // void SetDistanceStatus() override { m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE(-1)); }
+    void SetDistanceStatus() override { std::cout << "M600: Distance status unavailable" << std::endl; }
 
-    void SetCameraData() { cameraData_ = m600SensorData->GetCameraData(); }
-    void SetGimbalData() { gimbalData_ = m600SensorData->GetGimbalData(); }
-    // void SetDistanceData() { throw std::runtime_error("Distance data unavailable"); }
-    void SetDistanceData() { std::cout << "M600: Distance data unavailable" << std::endl; }
+    void SetCameraData() override { cameraData_ = m600SensorData->GetCameraData(); }
+    void SetGimbalData() override { gimbalData_ = m600SensorData->GetGimbalData(); }
+    // void SetDistanceData() override { throw std::runtime_error("Distance data unavailable"); }
+    void SetDistanceData() override { std::cout << "M600: Distance data unavailable" << std::endl; }
 
 private:
     nlab::lib::Dcmf dcmH2B_ = {};
@@ -122,21 +125,21 @@ public:
     MavicVisualData *mavicVisualData;
     MavicStatus *mavicStatus;
 
-    void SetGPSNum() { gpsNum_ = mavicGps->GetGpsNum(); }
-    void SetGPSHealth() { gpsHealth_ = int(mavicGps->GetGpsHealth()); }
-    void SetPosNED() { posNED_ = mavicIntegratedNavigation->GetPosNed(); }
-    void SetPosLLH() { posLLH_ = mavicIntegratedNavigation->GetPosLlh(); }
-    void SetVelHdg() { velHdg_ = mavicIntegratedNavigation->GetVelHdg(); }
-    void SetEuler() { euler_ = mavicIntegratedNavigation->GetEuler(); }
+    void SetGPSNum() override { gpsNum_ = mavicGps->GetGpsNum(); }
+    void SetGPSHealth() override { gpsHealth_ = int(mavicGps->GetGpsHealth()); }
+    void SetPosNED() override { posNED_ = mavicIntegratedNavigation->GetPosNed(); }
+    void SetPosLLH() override { posLLH_ = mavicIntegratedNavigation->GetPosLlh(); }
+    void SetVelHdg() override { velHdg_ = mavicIntegratedNavigation->GetVelHdg(); }
+    void SetEuler() override { euler_ = mavicIntegratedNavigation->GetEuler(); }
 
-    void SetFlightStatus() { flightStatus_ = int(mavicStatus->GetFlightStatus()); }
-    void SetGimbalStatus() { gimbalStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::GIMBAL)); }
-    void SetCameraStatus() { cameraStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::CAMERA)); }
-    void SetDistanceStatus() { distanceStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::LIDAR)); }
+    void SetFlightStatus() override { flightStatus_ = int(mavicStatus->GetFlightStatus()); }
+    void SetGimbalStatus() override { gimbalStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::GIMBAL)); }
+    void SetCameraStatus() override { cameraStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::CAMERA)); }
+    void SetDistanceStatus() override { distanceStatus_ = int(mavicStatus->GetPayloadStatus(MavicStatus::PAYLOAD_TYPE::LIDAR)); }
 
-    void SetCameraData() { cameraData_ = mavicCameraData->GetCameraData(); }
-    void SetGimbalData() { gimbalData_ = mavicGimbalData->GetGimbalData(); }
-    void SetDistanceData() { distanceData_ = mavicLidarData->GetTopLidarDistance(); }
+    void SetCameraData() override { cameraData_ = mavicCameraData->GetCameraData(); }
+    void SetGimbalData() override { gimbalData_ = mavicGimbalData->GetGimbalData(); }
+    void SetDistanceData() override { distanceData_ = mavicLidarData->GetTopLidarDistance(); }
 };
 
 class FcInputImpl
@@ -153,8 +156,8 @@ public:
         vehicleData->SetGPSHealth();
         vehicleData->SetPosNED();
         vehicleData->SetPosLLH();
+        vehicleData->SetEuler(); // M600에서 body to Hdg 변환 필요하기 때문에 SetVelHdg보다 먼저 호출
         vehicleData->SetVelHdg();
-        vehicleData->SetEuler();
 
         vehicleData->SetFlightStatus();
         vehicleData->SetGimbalStatus();
@@ -172,28 +175,19 @@ public:
 class FcInputImpl_M300 : public FcInputImpl
 {
 public:
-    VehicleData *CreateVehicle() const override
-    {
-        return new VehicleData_M300();
-    }
+    VehicleData *CreateVehicle() const override { return new VehicleData_M300(); }
 };
 
 class FcInputImpl_M600 : public FcInputImpl
 {
 public:
-    VehicleData *CreateVehicle() const override
-    {
-        return new VehicleData_M600();
-    }
+    VehicleData *CreateVehicle() const override { return new VehicleData_M600(); }
 };
 
 class FcInputImpl_Mavic : public FcInputImpl
 {
 public:
-    VehicleData *CreateVehicle() const override
-    {
-        return new VehicleData_Mavic();
-    }
+    VehicleData *CreateVehicle() const override { return new VehicleData_Mavic(); }
 };
 
 int main()
