@@ -9,15 +9,17 @@
 SkydioLidar::SkydioLidar() {}
 SkydioLidar::~SkydioLidar() {}
 
-SkydioLidar::LIDAR_STATUS GetLidarStatus() {
+SkydioLidar::LIDAR_STATUS SkydioLidar::GetLidarStatus()
+{
     return SkydioLidar::LIDAR_STATUS(rand() % 3);
 }
 
-float SkydioLidar::GetForwardLidarDistance() {
+float SkydioLidar::GetForwardLidarDistance()
+{
     srand(time(0));
-    float temp = (float) rand()/RAND_MAX * 12.0f - 5.0f;
+    float temp = (float)rand() / RAND_MAX * 12.0f - 5.0f;
     if (temp > 0.0f)
         return temp;
-    else 
+    else
         return -1;
 }

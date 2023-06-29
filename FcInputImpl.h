@@ -51,4 +51,10 @@ public:
     VehicleData *CreateVehicle() const override { return new VehicleData_Mavic(); }
 };
 
+class FcInputImpl_Skydio : public FcInputImpl
+{
+public:
+    VehicleData *CreateVehicle() const override { return new VehicleData_Skydio(); }
+};
+
 #endif // !FCINPUTINMPL_H

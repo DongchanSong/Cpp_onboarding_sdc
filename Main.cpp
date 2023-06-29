@@ -11,9 +11,13 @@ int main()
     FcInputImpl *fcMavic = new FcInputImpl_Mavic();
     VehicleData *dataMavic = fcMavic->FromApiToMc();
 
+    FcInputImpl *fcSkydio = new FcInputImpl_Skydio();
+    VehicleData *dataSkydio = fcSkydio->FromApiToMc();
+
     delete fcM300;
     delete fcM600;
     delete fcMavic;
+    delete fcSkydio;
 
     return 0;
 }

@@ -19,6 +19,12 @@
 #include "different_api/mavic/sensor/visual_data/visual_data.cc"
 #include "different_api/mavic/status/status.cc"
 
+#include "different_api/skydio/camera/camera.cc"
+#include "different_api/skydio/flight_controller/flight_controller.cc"
+#include "different_api/skydio/gimbal/gimbal.cc"
+#include "different_api/skydio/gps/gps.cc"
+#include "different_api/skydio/lidar/lidar.cc"
+
 #include <iostream>
 
 class VehicleData
@@ -143,6 +149,32 @@ public:
     void SetCameraData() override { cameraData_ = mavicCameraData->GetCameraData(); }
     void SetGimbalData() override { gimbalData_ = mavicGimbalData->GetGimbalData(); }
     void SetDistanceData() override { distanceData_ = mavicLidarData->GetTopLidarDistance(); }
+};
+
+class VehicleData_Skydio : public VehicleData
+{
+public:
+    SkydioCamera *skydioCamera;
+    SkydioFlightController *skydioFlightController;
+    SkydioGimbal *skydioGimbal;
+    SkydioGps *skydioGps;
+    SkydioLidar *skydioLidar;
+
+    void SetGPSNum() override { gpsNum_ = skydioGps->GetGpsNum(); }
+    void SetGPSHealth() override { gpsHealth_ = int(skydioGps->GetGpsHealth()); }
+    void SetPosNED() override { posNED_ = skydioFlightController->GetPosNed(); }
+    void SetPosLLH() override { posLLH_ = skydioFlightController->GetPosLlh(); }
+    void SetVelHdg() override { velHdg_ = skydioFlightController->GetVelHdg(); }
+    void SetEuler() override { euler_ = nlab::lib::Eulerf(skydioFlightController->GetQuaternion()); }
+
+    void SetFlightStatus() override { flightStatus_ = int(skydioFlightController->GetFlightStatus()); }
+    void SetGimbalStatus() override { gimbalStatus_ = int(skydioGimbal->GetGimbalStatus()); }
+    void SetCameraStatus() override { cameraStatus_ = int(skydioCamera->GetCameraStatus()); }
+    void SetDistanceStatus() override { distanceStatus_ = int(skydioLidar->GetLidarStatus()); }
+
+    void SetCameraData() override { cameraData_ = skydioCamera->GetCameraData(); }
+    void SetGimbalData() override { gimbalData_ = skydioGimbal->GetGimbalData(); }
+    void SetDistanceData() override { distanceData_ = skydioLidar->GetForwardLidarDistance(); }
 };
 
 #endif // ! VEHICLEDATA_H

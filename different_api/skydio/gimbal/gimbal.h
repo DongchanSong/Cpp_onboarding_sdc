@@ -2,17 +2,19 @@
 // Created by jhbai on 23. 05. 09.
 //
 
-#ifndef LIBSKYDIO_GIMBAL_HPP
+#ifndef LIBSKYDIO_GIMBAL_HPPz
 #define LIBSKYDIO_GIMBAL_HPP
 
 #include <nlab/math.hpp>
 
-class SkydioGimbal {
-public: 
+class SkydioGimbal
+{
+public:
     SkydioGimbal();
     ~SkydioGimbal();
 
-    enum class GIMBAL_STATUS {
+    enum class GIMBAL_STATUS
+    {
         DEFAULT = 0,
         OPERATIONAL = 1,
         ERROR = 2,
@@ -31,4 +33,4 @@ public:
     nlab::lib::Vector3f GetGimbalData();
 };
 
-#endif  // LIBSKYDIO_GIMBAL_HPP
+#endif // LIBSKYDIO_GIMBAL_HPP
