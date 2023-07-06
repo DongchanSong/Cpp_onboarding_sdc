@@ -19,5 +19,10 @@ int main()
     delete fcMavic;
     delete fcSkydio;
 
+    delete dataM300;
+    delete dataM600;
+    delete dataMavic;
+    delete dataSkydio;
+
     return 0;
 }
