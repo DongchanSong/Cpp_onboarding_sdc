@@ -1,29 +1,29 @@
 #ifndef VEHICLEDATA_H
 #define VEHICLEDATA_H
 
-#include "different_api/m300/gps/gps.cc"
-#include "different_api/m300/navigation/navigation.cc"
-#include "different_api/m300/sensor_data/sensor_data.cc"
-#include "different_api/m300/status/status.cc"
+#include "different_api/m300/gps/gps.h"
+#include "different_api/m300/navigation/navigation.h"
+#include "different_api/m300/sensor_data/sensor_data.h"
+#include "different_api/m300/status/status.h"
 
-#include "different_api/m600/gps/gps.cc"
-#include "different_api/m600/navigation/navigation.cc"
-#include "different_api/m600/sensor_data/sensor_data.cc"
-#include "different_api/m600/status/status.cc"
+#include "different_api/m600/gps/gps.h"
+#include "different_api/m600/navigation/navigation.h"
+#include "different_api/m600/sensor_data/sensor_data.h"
+#include "different_api/m600/status/status.h"
 
-#include "different_api/mavic/gps/gps.cc"
-#include "different_api/mavic/sensor/camera_data/camera_data.cc"
-#include "different_api/mavic/sensor/gimbal_data/gimbal_data.cc"
-#include "different_api/mavic/sensor/integrated_navigation/integrated_navigation.cc"
-#include "different_api/mavic/sensor/lidar_data/lidar_data.cc"
-#include "different_api/mavic/sensor/visual_data/visual_data.cc"
-#include "different_api/mavic/status/status.cc"
+#include "different_api/mavic/gps/gps.h"
+#include "different_api/mavic/sensor/camera_data/camera_data.h"
+#include "different_api/mavic/sensor/gimbal_data/gimbal_data.h"
+#include "different_api/mavic/sensor/integrated_navigation/integrated_navigation.h"
+#include "different_api/mavic/sensor/lidar_data/lidar_data.h"
+#include "different_api/mavic/sensor/visual_data/visual_data.h"
+#include "different_api/mavic/status/status.h"
 
-#include "different_api/skydio/camera/camera.cc"
-#include "different_api/skydio/flight_controller/flight_controller.cc"
-#include "different_api/skydio/gimbal/gimbal.cc"
-#include "different_api/skydio/gps/gps.cc"
-#include "different_api/skydio/lidar/lidar.cc"
+#include "different_api/skydio/camera/camera.h"
+#include "different_api/skydio/flight_controller/flight_controller.h"
+#include "different_api/skydio/gimbal/gimbal.h"
+#include "different_api/skydio/gps/gps.h"
+#include "different_api/skydio/lidar/lidar.h"
 
 #include <iostream>
 
