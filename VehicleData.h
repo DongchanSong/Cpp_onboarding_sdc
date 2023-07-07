@@ -159,14 +159,14 @@ public:
     void SetFlightStatus() override { flightStatus_ = int(m600Status->GetFlightStatus()); }
     void SetGimbalStatus() override { gimbalStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::GIMBAL)); }
     void SetCameraStatus() override { cameraStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::CAMERA)); }
-    void SetDistanceStatus() override { m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE(-1)); }
-    // void SetDistanceStatus() override { std::cout << "M600: Distance status unavailable" << std::endl; }
+    // void SetDistanceStatus() override { m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE(-1)); }
+    void SetDistanceStatus() override { std::cout << "M600: Distance status unavailable" << std::endl; }
 
     void SetCameraData() override { cameraData_ = m600SensorData->GetCameraData(); }
     void SetGimbalData() override { gimbalData_ = m600SensorData->GetGimbalData(); }
-    void SetDistanceData() override { distanceData_ = -1; }
+    // void SetDistanceData() override { distanceData_ = -1; }
     // void SetDistanceData() override { throw std::runtime_error("Distance data unavailable"); }
-    // void SetDistanceData() override { std::cout << "M600: Distance data unavailable" << std::endl; }
+    void SetDistanceData() override { std::cout << "M600: Distance data unavailable" << std::endl; }
 
     float GetGPSNum() override { return gpsNum_; }
     int GetGPSHealth() override { return gpsHealth_; }
@@ -178,11 +178,11 @@ public:
     int GetFlightStatus() override { return flightStatus_; }
     int GetGimbalStatus() override { return gimbalStatus_; }
     int GetCameraStatus() override { return cameraStatus_; }
-    int GetDistanceStatus() override { return distanceStatus_; }
+    int GetDistanceStatus() override { return -1; }
 
     std::vector<std::vector<int>> GetCameraData() override { return cameraData_; }
     nlab::lib::Vector3f GetGimbalData() override { return gimbalData_; }
-    float GetDistanceData() override { return distanceData_; }
+    float GetDistanceData() override { return -1; }
 
 private:
     nlab::lib::Dcmf dcmH2B_ = {};
