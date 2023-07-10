@@ -13,44 +13,69 @@ VehicleData *dataMavic = fcMavic->FromApiToMc();
 FcInputImpl *fcSkydio = new FcInputImpl_Skydio();
 VehicleData *dataSkydio = fcSkydio->FromApiToMc();
 
-TEST(M300_GPS, m300_GPS)
-{
-    ASSERT_LT(dataM300->GetGPSNum(), 20 + 1);
-    ASSERT_GE(dataM300->GetGPSNum(), 1);
+void RangeCheck(int, int, int);
+void RangeCheck(float, float, float);
+// void RangeCheck(nlab::lib::Vector3f, nlab::lib::Vector3f, nlab::lib::Vector3f);
+// void RangeCheck(nlab::lib::Vector3, nlab::lib::Vector3, nlab::lib::Vector3);
 
-    ASSERT_LT(dataM300->GetGPSHealth(), 2 + 1);
-    ASSERT_GE(dataM300->GetGPSHealth(), 1);
+TEST(M300_Range, m300_Range)
+{
+    RangeCheck(dataM300->GetGPSNum(), 20.0f + 1.0f, 1.0f);
+    RangeCheck(dataM300->GetGPSHealth(), 3, 1);
 }
 
-TEST(M600_GPS, m600_GPS)
+TEST(M600_Range, m600_Range)
 {
-    ASSERT_LT(dataM600->GetGPSNum(), 20 + 1);
-    ASSERT_GE(dataM600->GetGPSNum(), 1);
-
-    ASSERT_LT(dataM600->GetGPSHealth(), 2 + 1);
-    ASSERT_GE(dataM600->GetGPSHealth(), 1);
+    RangeCheck(dataM600->GetGPSNum(), 20.0f + 1.0f, 1.0f);
+    RangeCheck(dataM600->GetGPSHealth(), 3, 1);
 }
 
-TEST(Mavic_GPS, mavic_GPS)
+TEST(Mavic_Range, mavic_Range)
 {
-    ASSERT_LT(dataMavic->GetGPSNum(), 20 + 1);
-    ASSERT_GE(dataMavic->GetGPSNum(), 1);
-
-    ASSERT_LT(dataMavic->GetGPSHealth(), 2 + 1);
-    ASSERT_GE(dataMavic->GetGPSHealth(), 1);
+    RangeCheck(dataMavic->GetGPSNum(), 20.0f + 1.0f, 1.0f);
+    RangeCheck(dataMavic->GetGPSHealth(), 3, 1);
 }
 
-TEST(Skydio_GPS, skydio_GPS)
+TEST(Skydio_Range, skydio_Range)
 {
-    ASSERT_LT(dataSkydio->GetGPSNum(), 20 + 1);
-    ASSERT_GE(dataSkydio->GetGPSNum(), 1);
-
-    ASSERT_LT(dataSkydio->GetGPSHealth(), 2 + 1);
-    ASSERT_GE(dataSkydio->GetGPSHealth(), 1);
+    RangeCheck(dataSkydio->GetGPSNum(), 20.0f + 1.0f, 1.0f);
+    RangeCheck(dataSkydio->GetGPSHealth(), 3, 1);
 }
 
 int main(int argc, char *argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
+}
+
+void RangeCheck(int object, int upperBound, int lowerBound)
+{
+    ASSERT_LT(object, upperBound);
+    ASSERT_GE(object, lowerBound);
+}
+
+void RangeCheck(float object, float upperBound, float lowerBound)
+{
+    ASSERT_LT(object, upperBound);
+    ASSERT_GE(object, lowerBound);
+}
+
+void RangeCheck(nlab::lib::Vector3f object, nlab::lib::Vector3f upperBound, nlab::lib::Vector3f lowerBound)
+{
+    ASSERT_LT(object(0), upperBound(0));
+    ASSERT_LT(object(1), upperBound(1));
+    ASSERT_LT(object(2), upperBound(2));
+    ASSERT_GE(object(0), lowerBound(0));
+    ASSERT_GE(object(1), lowerBound(1));
+    ASSERT_GE(object(2), lowerBound(2));
+}
+
+void RangeCheck(nlab::lib::Vector3 object, nlab::lib::Vector3 upperBound, nlab::lib::Vector3 lowerBound)
+{
+    ASSERT_LT(object(0), upperBound(0));
+    ASSERT_LT(object(1), upperBound(1));
+    ASSERT_LT(object(2), upperBound(2));
+    ASSERT_GE(object(0), lowerBound(0));
+    ASSERT_GE(object(1), lowerBound(1));
+    ASSERT_GE(object(2), lowerBound(2));
 }
