@@ -48,26 +48,11 @@ public:
     virtual void SetGimbalData() = 0;
     virtual void SetDistanceData() = 0;
 
-    // float GetGPSNum() { return gpsNum_; }
-    // int GetGPSHealth() { return gpsHealth_; }
-    // nlab::lib::Vector3f GetPosNED() { return posNED_; }
-    // nlab::lib::Vector3 GetPosLLH() { return posLLH_; }
-    // nlab::lib::Vector3f GetVelHdg() { return velHdg_; }
-    // nlab::lib::Vector3f GetEuler() { return euler_; }
-
-    // int GetFlightStatus() { return flightStatus_; }
-    // int GetGimbalStatus() { return gimbalStatus_; }
-    // int GetCameraStatus() { return cameraStatus_; }
-    // int GetDistanceStatus() { return distanceStatus_; }
-
-    // std::vector<std::vector<int>> GetCameraData() { return cameraData_; }
-    // nlab::lib::Vector3f GetGimbalData() { return gimbalData_; }
-    // float GetDistanceData() { return distanceData_; }
-
     virtual float GetGPSNum() = 0;
     virtual int GetGPSHealth() = 0;
     virtual nlab::lib::Vector3f GetPosNED() = 0;
     virtual nlab::lib::Vector3 GetPosLLH() = 0;
+    // virtual nlab::lib::Vector3f GetVelBody() = 0;
     virtual nlab::lib::Vector3f GetVelHdg() = 0;
     virtual nlab::lib::Vector3f GetEuler() = 0;
 
@@ -149,6 +134,7 @@ public:
     void SetGPSHealth() override { gpsHealth_ = int(m600Gps->GetGpsHealth()); }
     void SetPosNED() override { posNED_ = m600Navigation->GetPosNed(); }
     void SetPosLLH() override { posLLH_ = m600Navigation->GetPosLlh(); }
+    void SetVelBody() { velBody_ = m600Navigation->GetVelBody(); }
     void SetVelHdg() override
     {
         dcmH2B_ = nlab::lib::Dcmf(nlab::lib::Eulerf(euler_(0), euler_(1), 0.0f));
@@ -159,19 +145,17 @@ public:
     void SetFlightStatus() override { flightStatus_ = int(m600Status->GetFlightStatus()); }
     void SetGimbalStatus() override { gimbalStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::GIMBAL)); }
     void SetCameraStatus() override { cameraStatus_ = int(m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE::CAMERA)); }
-    // void SetDistanceStatus() override { m600Status->GetPayloadStatus(M600Status::PAYLOAD_TYPE(-1)); }
     void SetDistanceStatus() override { std::cout << "M600: Distance status unavailable" << std::endl; }
 
     void SetCameraData() override { cameraData_ = m600SensorData->GetCameraData(); }
     void SetGimbalData() override { gimbalData_ = m600SensorData->GetGimbalData(); }
-    // void SetDistanceData() override { distanceData_ = -1; }
-    // void SetDistanceData() override { throw std::runtime_error("Distance data unavailable"); }
     void SetDistanceData() override { std::cout << "M600: Distance data unavailable" << std::endl; }
 
     float GetGPSNum() override { return gpsNum_; }
     int GetGPSHealth() override { return gpsHealth_; }
     nlab::lib::Vector3f GetPosNED() override { return posNED_; }
     nlab::lib::Vector3 GetPosLLH() override { return posLLH_; }
+    nlab::lib::Vector3f GetVelBody() { return velBody_; }
     nlab::lib::Vector3f GetVelHdg() override { return velHdg_; }
     nlab::lib::Vector3f GetEuler() override { return euler_; }
 
@@ -186,6 +170,7 @@ public:
 
 private:
     nlab::lib::Dcmf dcmH2B_ = {};
+    nlab::lib::Vector3f velBody_;
 };
 
 class VehicleData_Mavic : public VehicleData
@@ -246,6 +231,7 @@ public:
     void SetPosNED() override { posNED_ = skydioFlightController->GetPosNed(); }
     void SetPosLLH() override { posLLH_ = skydioFlightController->GetPosLlh(); }
     void SetVelHdg() override { velHdg_ = skydioFlightController->GetVelHdg(); }
+    void SetQuaternion() { quaternion_ = skydioFlightController->GetQuaternion(); }
     void SetEuler() override { euler_ = nlab::lib::Eulerf(skydioFlightController->GetQuaternion()); }
 
     void SetFlightStatus() override { flightStatus_ = int(skydioFlightController->GetFlightStatus()); }
@@ -262,9 +248,14 @@ public:
     nlab::lib::Vector3f GetPosNED() override { return posNED_; }
     nlab::lib::Vector3 GetPosLLH() override { return posLLH_; }
     nlab::lib::Vector3f GetVelHdg() override { return velHdg_; }
+    nlab::lib::Quaternionf GetQuaternion() { return quaternion_; }
     nlab::lib::Vector3f GetEuler() override { return euler_; }
 
-    int GetFlightStatus() override { return flightStatus_; }
+    int
+    GetFlightStatus() override
+    {
+        return flightStatus_;
+    }
     int GetGimbalStatus() override { return gimbalStatus_; }
     int GetCameraStatus() override { return cameraStatus_; }
     int GetDistanceStatus() override { return distanceStatus_; }
@@ -272,6 +263,9 @@ public:
     std::vector<std::vector<int>> GetCameraData() override { return cameraData_; }
     nlab::lib::Vector3f GetGimbalData() override { return gimbalData_; }
     float GetDistanceData() override { return distanceData_; }
+
+private:
+    nlab::lib::Quaternionf quaternion_;
 };
 
 #endif // ! VEHICLEDATA_H
