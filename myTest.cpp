@@ -22,7 +22,6 @@ int gpsHealthRange[2] = {1, 3};
 nlab::lib::Vector3f posNEDRange[2] = {nlab::lib::Vector3f(-50.0f, -50.0f, 1.0f), nlab::lib::Vector3f(50.0f, 50.0f, 101.0f)};
 nlab::lib::Vector3 posLLHRange[2] = {nlab::lib::Vector3(37.0, 126.0, 1.0), nlab::lib::Vector3(38.0, 127.0, 101.0)};
 nlab::lib::Vector3f velHdgRange[2] = {nlab::lib::Vector3f(-3.0f, -3.0f, -3.0f), nlab::lib::Vector3f(3.0f, 3.0f, 3.0f)};
-nlab::lib::Vector3f velBodyRange[2] = {nlab::lib::Vector3f(-3.0f, -3.0f, -3.0f), nlab::lib::Vector3f(3.0f, 3.0f, 3.0f)};
 nlab::lib::Vector3f eulerRange[2] = {nlab::lib::Vector3f(-30, -30, -180), nlab::lib::Vector3f(30, 30, 180)};
 
 TEST(M300_Range, m300_Range)
@@ -41,7 +40,6 @@ TEST(M600_Range, m600_Range)
     RangeCheck(dataM600->GetGPSHealth(), gpsHealthRange[0], gpsHealthRange[1]);
     RangeCheck(dataM600->GetPosNED(), posNEDRange[0], posNEDRange[1]);
     RangeCheck(dataM600->GetPosLLH(), posLLHRange[0], posLLHRange[1]);
-    // RangeCheck(dataM600->GetVelBody(), velBodyRange[0], velBodyRange[1]);
     RangeCheck(dataM600->GetEuler(), eulerRange[0], eulerRange[1]);
 }
 
@@ -62,7 +60,6 @@ TEST(Skydio_Range, skydio_Range)
     RangeCheck(dataSkydio->GetPosNED(), posNEDRange[0], posNEDRange[1]);
     RangeCheck(dataSkydio->GetPosLLH(), posLLHRange[0], posLLHRange[1]);
     RangeCheck(dataSkydio->GetVelHdg(), velHdgRange[0], velHdgRange[1]);
-    // RangeCheck(dataSkydio->GetQuaternion(), eulerRange[0], eulerRange[1]);
 }
 
 int main(int argc, char *argv[])
