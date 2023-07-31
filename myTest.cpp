@@ -16,7 +16,6 @@ void RangeCheck(float, float, float);
 void RangeCheck(double, double, double);
 void RangeCheck(nlab::lib::Vector3f, nlab::lib::Vector3f, nlab::lib::Vector3f);
 void RangeCheck(nlab::lib::Vector3, nlab::lib::Vector3, nlab::lib::Vector3);
-void RangeCheckGPSandPos(VehicleData &);
 
 float gpsNumRange[2] = {1.0f, 21.0f};
 int gpsHealthRange[2] = {1, 3};
@@ -25,32 +24,43 @@ nlab::lib::Vector3 posLLHRange[2] = {nlab::lib::Vector3(37.0, 126.0, 1.0), nlab:
 nlab::lib::Vector3f velHdgRange[2] = {nlab::lib::Vector3f(-3.0f, -3.0f, -3.0f), nlab::lib::Vector3f(3.0f, 3.0f, 3.0f)};
 nlab::lib::Vector3f velBodyRange[2] = {nlab::lib::Vector3f(-3.0f, -3.0f, -3.0f), nlab::lib::Vector3f(3.0f, 3.0f, 3.0f)};
 nlab::lib::Vector3f eulerRange[2] = {nlab::lib::Vector3f(-30, -30, -180), nlab::lib::Vector3f(30, 30, 180)};
-nlab::lib::Quaternionf quaternionRange[2] = {};
 
 TEST(M300_Range, m300_Range)
 {
-    RangeCheckGPSandPos(*dataM300);
+    RangeCheck(dataM300->GetGPSNum(), gpsNumRange[0], gpsNumRange[1]);
+    RangeCheck(dataM300->GetGPSHealth(), gpsHealthRange[0], gpsHealthRange[1]);
+    RangeCheck(dataM300->GetPosNED(), posNEDRange[0], posNEDRange[1]);
+    RangeCheck(dataM300->GetPosLLH(), posLLHRange[0], posLLHRange[1]);
     RangeCheck(dataM300->GetVelHdg(), velHdgRange[0], velHdgRange[1]);
     RangeCheck(dataM300->GetEuler(), eulerRange[0], eulerRange[1]);
 }
 
 TEST(M600_Range, m600_Range)
 {
-    RangeCheckGPSandPos(*dataM600);
+    RangeCheck(dataM600->GetGPSNum(), gpsNumRange[0], gpsNumRange[1]);
+    RangeCheck(dataM600->GetGPSHealth(), gpsHealthRange[0], gpsHealthRange[1]);
+    RangeCheck(dataM600->GetPosNED(), posNEDRange[0], posNEDRange[1]);
+    RangeCheck(dataM600->GetPosLLH(), posLLHRange[0], posLLHRange[1]);
     // RangeCheck(dataM600->GetVelBody(), velBodyRange[0], velBodyRange[1]);
     RangeCheck(dataM600->GetEuler(), eulerRange[0], eulerRange[1]);
 }
 
 TEST(Mavic_Range, mavic_Range)
 {
-    RangeCheckGPSandPos(*dataMavic);
+    RangeCheck(dataMavic->GetGPSNum(), gpsNumRange[0], gpsNumRange[1]);
+    RangeCheck(dataMavic->GetGPSHealth(), gpsHealthRange[0], gpsHealthRange[1]);
+    RangeCheck(dataMavic->GetPosNED(), posNEDRange[0], posNEDRange[1]);
+    RangeCheck(dataMavic->GetPosLLH(), posLLHRange[0], posLLHRange[1]);
     RangeCheck(dataMavic->GetVelHdg(), velHdgRange[0], velHdgRange[1]);
     RangeCheck(dataMavic->GetEuler(), eulerRange[0], eulerRange[1]);
 }
 
 TEST(Skydio_Range, skydio_Range)
 {
-    RangeCheckGPSandPos(*dataSkydio);
+    RangeCheck(dataSkydio->GetGPSNum(), gpsNumRange[0], gpsNumRange[1]);
+    RangeCheck(dataSkydio->GetGPSHealth(), gpsHealthRange[0], gpsHealthRange[1]);
+    RangeCheck(dataSkydio->GetPosNED(), posNEDRange[0], posNEDRange[1]);
+    RangeCheck(dataSkydio->GetPosLLH(), posLLHRange[0], posLLHRange[1]);
     RangeCheck(dataSkydio->GetVelHdg(), velHdgRange[0], velHdgRange[1]);
     // RangeCheck(dataSkydio->GetQuaternion(), eulerRange[0], eulerRange[1]);
 }
@@ -91,13 +101,4 @@ void RangeCheck(nlab::lib::Vector3 object, nlab::lib::Vector3 lowerBound, nlab::
     RangeCheck(object(0), lowerBound(0), upperBound(0));
     RangeCheck(object(1), lowerBound(1), upperBound(1));
     RangeCheck(object(2), lowerBound(2), upperBound(2));
-}
-
-void RangeCheckGPSandPos(VehicleData &data)
-{
-    RangeCheck(data.GetGPSNum(), gpsNumRange[0], gpsNumRange[1]);
-    RangeCheck(data.GetGPSHealth(), gpsHealthRange[0], gpsHealthRange[1]);
-
-    RangeCheck(data.GetPosNED(), posNEDRange[0], posNEDRange[1]);
-    RangeCheck(data.GetPosLLH(), posLLHRange[0], posLLHRange[1]);
 }
